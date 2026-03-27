@@ -1,1 +1,11 @@
-/tmp/vantio-edr.json
+{"timestamp": 1774578068, "event": "threat_assassinated", "pid": 53428, "uid": 1000, "context": "STANDARD", "spawned_by": "bash"}
+{"timestamp": 1774578377, "event": "threat_assassinated", "pid": 54547, "uid": 1000, "context": "STANDARD", "spawned_by": "bash"}
+{"timestamp": 1774578449, "event": "threat_assassinated", "pid": 55123, "uid": 1000, "context": "STANDARD", "spawned_by": "bash"}
+{"timestamp": 1774578449, "event": "threat_assassinated", "pid": 55121, "uid": 1000, "context": "STANDARD", "spawned_by": "bash"}
+{"timestamp": 1774578449, "event": "threat_assassinated", "pid": 55122, "uid": 1000, "context": "STANDARD", "spawned_by": "bash"}
+{"timestamp": 1774578453, "event": "threat_assassinated", "pid": 55191, "uid": 1000, "context": "STANDARD", "spawned_by": "bash"}
+{"timestamp": 1774578453, "event": "threat_assassinated", "pid": 55190, "uid": 1000, "context": "STANDARD", "spawned_by": "bash"}
+{"timestamp": 1774578453, "event": "threat_assassinated", "pid": 55192, "uid": 1000, "context": "STANDARD", "spawned_by": "bash"}
+{"timestamp": 1774578455, "event": "threat_assassinated", "pid": 55229, "uid": 1000, "context": "STANDARD", "spawned_by": "bash"}
+{"timestamp": 1774578455, "event": "threat_assassinated", "pid": 55231, "uid": 1000, "context": "STANDARD", "spawned_by": "bash"}
+{"timestamp": 1774578455, "event": "threat_assassinated", "pid": 55230, "uid": 1000, "context": "STANDARD", "spawned_by": "bash"}
