@@ -14,6 +14,11 @@ fn format_rule(cmd: &str) -> [u8; 32] {
     buf
 }
 
+fn parse_comm(comm: &[u8; 16]) -> String {
+    let len = comm.iter().position(|&c| c == 0).unwrap_or(16);
+    String::from_utf8_lossy(&comm[..len]).into_owned()
+}
+
 #[tokio::main]
 async fn main() -> Result<(), anyhow::Error> {
     let rlim = libc::rlimit { rlim_cur: libc::RLIM_INFINITY, rlim_max: libc::RLIM_INFINITY };
@@ -27,24 +32,19 @@ async fn main() -> Result<(), anyhow::Error> {
 
     let mut registry: aya::maps::HashMap<_, [u8; 32], u32> = aya::maps::HashMap::try_from(bpf.take_map("THREAT_REGISTRY").unwrap())?;
     let assassinated_context: aya::maps::HashMap<_, u32, u32> = aya::maps::HashMap::try_from(bpf.take_map("ASSASSINATED_CONTEXT").unwrap())?;
+    let ancestry_map: aya::maps::HashMap<_, u32, [u8; 16]> = aya::maps::HashMap::try_from(bpf.take_map("ANCESTRY_MAP").unwrap())?;
     let mut seen_pids = HashSet::new();
 
-    let threats = vec![
-        "/usr/bin/wget", 
-        "/usr/bin/curl", 
-        "/bin/nc", 
-        "/usr/bin/nc" // <-- Add the modern Ubuntu path
-    ];
+    let threats = vec!["/usr/bin/wget", "/usr/bin/curl", "/bin/nc", "/usr/bin/nc"];
 
     for threat in &threats {
         registry.insert(format_rule(threat), 1, 0)?;
     }
 
-    // Prepare the secure log file
-    let log_path = "/tmp/vantio-edr.json"; // Using /tmp for easy testing in WSL
+    let log_path = "/tmp/vantio-edr.json";
     println!("====================================================");
-    println!("[ ∅ VANTIO VECTOR ] SIEM TELEMETRY LINK ONLINE.");
-    println!("Writing structured JSON threat logs to: {}", log_path);
+    println!("[ ∅ VANTIO VECTOR ] ANCESTRY ENGINE ONLINE.");
+    println!("Extracting Ghost Ancestors and Telemetry to: {}", log_path);
     println!("====================================================");
 
     loop {
@@ -52,25 +52,26 @@ async fn main() -> Result<(), anyhow::Error> {
             if let Ok((pid, uid)) = item {
                 if !seen_pids.contains(&pid) {
                     
+                    let mut ancestor_name = String::from("UNKNOWN");
+                    if let Ok(comm_bytes) = ancestry_map.get(&pid, 0) {
+                        ancestor_name = parse_comm(&comm_bytes);
+                    }
+
                     let user_context = if uid == 0 { "ROOT" } else { "STANDARD" };
                     let timestamp = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
 
-                    // 1. Print to the terminal for the operator
-                    println!("[ ∅ VANTIO EDR ] THREAT NEUTRALIZED | PID: {} | UID: {}", pid, uid);
+                    println!("[ ∅ VANTIO EDR ] THREAT ASSASSINATED!");
+                    println!("    ├─ TRUE PID   : {}", pid);
+                    println!("    ├─ ATTACKER   : UID {} [{}]", uid, user_context);
+                    println!("    └─ SPAWNED BY : {} (The Ancestor)", ancestor_name);
+                    println!("----------------------------------------------------");
 
-                    // 2. Format the exact event as a JSON payload for SIEM ingestion
                     let json_log = format!(
-                        r#"{{"timestamp": {}, "event": "threat_assassinated", "pid": {}, "uid": {}, "context": "{}"}}"#,
-                        timestamp, pid, uid, user_context
+                        r#"{{"timestamp": {}, "event": "threat_assassinated", "pid": {}, "uid": {}, "context": "{}", "spawned_by": "{}"}}"#,
+                        timestamp, pid, uid, user_context, ancestor_name
                     );
 
-                    // 3. Append the JSON log to our persistent file
-                    let mut file = OpenOptions::new()
-                        .create(true)
-                        .append(true)
-                        .open(log_path)
-                        .expect("Failed to open SIEM log file");
-                    
+                    let mut file = OpenOptions::new().create(true).append(true).open(log_path).expect("Failed to open SIEM log file");
                     writeln!(file, "{}", json_log).expect("Failed to write JSON log");
 
                     seen_pids.insert(pid);
