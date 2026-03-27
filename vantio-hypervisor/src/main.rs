@@ -1,8 +1,10 @@
 use aya::programs::TracePoint;
 use aya::{include_bytes_aligned, Ebpf};
 use std::collections::HashSet;
-use std::time::Duration;
+use std::time::{SystemTime, UNIX_EPOCH, Duration};
 use std::thread::sleep;
+use std::fs::OpenOptions;
+use std::io::Write;
 
 fn format_rule(cmd: &str) -> [u8; 32] {
     let mut buf = [0u8; 32];
@@ -24,35 +26,53 @@ async fn main() -> Result<(), anyhow::Error> {
     program.attach("syscalls", "sys_enter_execve")?;
 
     let mut registry: aya::maps::HashMap<_, [u8; 32], u32> = aya::maps::HashMap::try_from(bpf.take_map("THREAT_REGISTRY").unwrap())?;
-    // Connect to our new Context map
     let assassinated_context: aya::maps::HashMap<_, u32, u32> = aya::maps::HashMap::try_from(bpf.take_map("ASSASSINATED_CONTEXT").unwrap())?;
     let mut seen_pids = HashSet::new();
 
-    let threats = vec!["/usr/bin/wget", "/usr/bin/curl", "/bin/nc"];
+    let threats = vec![
+        "/usr/bin/wget", 
+        "/usr/bin/curl", 
+        "/bin/nc", 
+        "/usr/bin/nc" // <-- Add the modern Ubuntu path
+    ];
 
     for threat in &threats {
         registry.insert(format_rule(threat), 1, 0)?;
     }
 
+    // Prepare the secure log file
+    let log_path = "/tmp/vantio-edr.json"; // Using /tmp for easy testing in WSL
     println!("====================================================");
-    println!("[ ∅ VANTIO VECTOR ] CONTEXT ENGINE ONLINE.");
-    println!("Scanning for executions and extracting User Attribution...");
+    println!("[ ∅ VANTIO VECTOR ] SIEM TELEMETRY LINK ONLINE.");
+    println!("Writing structured JSON threat logs to: {}", log_path);
     println!("====================================================");
 
     loop {
-        // Sweep the map for PID (Key) and UID (Value)
         for item in assassinated_context.iter() {
             if let Ok((pid, uid)) = item {
                 if !seen_pids.contains(&pid) {
                     
-                    // Format the UID to be human-readable
-                    let user_context = if uid == 0 { "ROOT (CRITICAL THREAT)" } else { "STANDARD USER" };
+                    let user_context = if uid == 0 { "ROOT" } else { "STANDARD" };
+                    let timestamp = SystemTime::now().duration_since(UNIX_EPOCH).unwrap().as_secs();
 
-                    println!("[ ∅ VANTIO EDR ] THREAT ASSASSINATED!");
-                    println!("    ├─ TRUE PID : {}", pid);
-                    println!("    └─ ATTACKER : UID {} [{}]", uid, user_context);
-                    println!("----------------------------------------------------");
+                    // 1. Print to the terminal for the operator
+                    println!("[ ∅ VANTIO EDR ] THREAT NEUTRALIZED | PID: {} | UID: {}", pid, uid);
+
+                    // 2. Format the exact event as a JSON payload for SIEM ingestion
+                    let json_log = format!(
+                        r#"{{"timestamp": {}, "event": "threat_assassinated", "pid": {}, "uid": {}, "context": "{}"}}"#,
+                        timestamp, pid, uid, user_context
+                    );
+
+                    // 3. Append the JSON log to our persistent file
+                    let mut file = OpenOptions::new()
+                        .create(true)
+                        .append(true)
+                        .open(log_path)
+                        .expect("Failed to open SIEM log file");
                     
+                    writeln!(file, "{}", json_log).expect("Failed to write JSON log");
+
                     seen_pids.insert(pid);
                 }
             }
