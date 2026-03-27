@@ -41,7 +41,7 @@ async fn main() -> Result<(), anyhow::Error> {
         registry.insert(format_rule(threat), 1, 0)?;
     }
 
-    let log_path = "/tmp/vantio-edr.json";
+    let log_path = "./vantio-edr.json";
     println!("====================================================");
     println!("[ ∅ VANTIO VECTOR ] ANCESTRY ENGINE ONLINE.");
     println!("Extracting Ghost Ancestors and Telemetry to: {}", log_path);
