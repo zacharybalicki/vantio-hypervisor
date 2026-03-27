@@ -4,8 +4,6 @@ use std::collections::HashSet;
 use std::time::Duration;
 use std::thread::sleep;
 
-// Helper function to format our strings into exactly 32 zero-padded bytes
-// so they perfectly match the kernel's memory map keys.
 fn format_rule(cmd: &str) -> [u8; 32] {
     let mut buf = [0u8; 32];
     let bytes = cmd.as_bytes();
@@ -26,38 +24,35 @@ async fn main() -> Result<(), anyhow::Error> {
     program.attach("syscalls", "sys_enter_execve")?;
 
     let mut registry: aya::maps::HashMap<_, [u8; 32], u32> = aya::maps::HashMap::try_from(bpf.take_map("THREAT_REGISTRY").unwrap())?;
-    let assassinated_pids: aya::maps::HashMap<_, u32, u32> = aya::maps::HashMap::try_from(bpf.take_map("ASSASSINATED_PIDS").unwrap())?;
+    // Connect to our new Context map
+    let assassinated_context: aya::maps::HashMap<_, u32, u32> = aya::maps::HashMap::try_from(bpf.take_map("ASSASSINATED_CONTEXT").unwrap())?;
     let mut seen_pids = HashSet::new();
 
-    // ==========================================
-    // THE THREAT REGISTRY PAYLOAD
-    // Execve usually resolves the absolute path of the binary, so we map the paths.
-    // ==========================================
-    let threats = vec![
-        "/usr/bin/wget", 
-        "/usr/bin/curl", 
-        "/usr/bin/nmap",
-        "/bin/nc" // Netcat (hacker reverse-shell tool)
-    ];
+    let threats = vec!["/usr/bin/wget", "/usr/bin/curl", "/bin/nc"];
 
-    // Inject all rules into the kernel instantly
     for threat in &threats {
         registry.insert(format_rule(threat), 1, 0)?;
     }
 
     println!("====================================================");
-    println!("[ ∅ VANTIO VECTOR ] O(1) MULTI-THREAT ARRAY ONLINE.");
-    println!("Currently enforcing {} Zero-Trust execution rules:", threats.len());
-    for t in &threats {
-        println!("  -> [BLOCKED] {}", t);
-    }
+    println!("[ ∅ VANTIO VECTOR ] CONTEXT ENGINE ONLINE.");
+    println!("Scanning for executions and extracting User Attribution...");
     println!("====================================================");
 
     loop {
-        for item in assassinated_pids.iter() {
-            if let Ok((pid, _)) = item {
+        // Sweep the map for PID (Key) and UID (Value)
+        for item in assassinated_context.iter() {
+            if let Ok((pid, uid)) = item {
                 if !seen_pids.contains(&pid) {
-                    println!("[ ∅ VANTIO EDR ] TARGET ASSASSINATED | LETHAL FORCE ON PID: {}", pid);
+                    
+                    // Format the UID to be human-readable
+                    let user_context = if uid == 0 { "ROOT (CRITICAL THREAT)" } else { "STANDARD USER" };
+
+                    println!("[ ∅ VANTIO EDR ] THREAT ASSASSINATED!");
+                    println!("    ├─ TRUE PID : {}", pid);
+                    println!("    └─ ATTACKER : UID {} [{}]", uid, user_context);
+                    println!("----------------------------------------------------");
+                    
                     seen_pids.insert(pid);
                 }
             }
