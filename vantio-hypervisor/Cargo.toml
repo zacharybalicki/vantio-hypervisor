@@ -6,21 +6,21 @@ edition.workspace = true
 license.workspace = true
 
 [dependencies]
-vantio-hypervisor-common = { path = "../vantio-hypervisor-common", features = ["user"] }
-
-anyhow = { workspace = true, default-features = true }
+reqwest = { version = "0.12", features = ["json"] }
+serde_json = "1.0"
+vantio-hypervisor-common = { path = "../vantio-hypervisor-common", features = ["user"], version = "0.1.0" }
+anyhow.workspace = true
+anyhow.default-features = true
 aya = { workspace = true }
 aya-log = { workspace = true }
-env_logger = { workspace = true }
+env_logger.workspace = true
 libc = { workspace = true }
-log = { workspace = true }
-tokio = { workspace = true, features = [
-    "macros",
-    "rt",
-    "rt-multi-thread",
-    "net",
-    "signal",
-] }
+log.workspace = true
+tokio = { workspace = true, features = ["macros", "rt", "rt-multi-thread", "net", "signal"] }
+google-cloud-spanner = "0.33.0"
+uuid = { version = "1.23.0", features = ["v4"] }
+axum = "0.8.8"
+serde = { version = "1.0.228", features = ["derive"] }
 [build-dependencies]
 anyhow = { workspace = true }
 aya-build = { workspace = true }
@@ -37,7 +37,6 @@ cargo_metadata = { workspace = true }
 # Finally note that *any* usage of `artifact = ...` in *any* Cargo.toml in the workspace breaks
 # workflows with stable cargo; stable cargo outright refuses to load manifests that use unstable
 # features.
-vantio-hypervisor-ebpf = { path = "../vantio-hypervisor-ebpf" }
 
 [[bin]]
 name = "vantio-hypervisor"

@@ -1,0 +1,8 @@
+[package]
+name = "vantio-phantom-dimension"
+version = "0.1.0"
+license.workspace = true
+edition.workspace = true
+
+[dependencies]
+nix = { version = "0.31.2", features = ["process", "sched", "fs", "hostname", "mount"] }

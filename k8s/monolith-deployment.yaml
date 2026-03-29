@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vantio-monolith
+  labels:
+    app: vantio-monolith
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: vantio-monolith
+  template:
+    metadata:
+      labels:
+        app: vantio-monolith
+    spec:
+      containers:
+      - name: vantio-monolith
+        image: us-central1-docker.pkg.dev/glass-stratum-490823-q0/vantio-repo/vantio-monolith:v1
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: "50m"      # Drastically reduced CPU footprint
+            memory: "128Mi" # Hyper-efficient memory boundary
