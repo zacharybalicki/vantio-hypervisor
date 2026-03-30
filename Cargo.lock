@@ -2815,6 +2815,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "vantio-l7-proxy"
+version = "0.1.0"
+dependencies = [
+ "axum",
+ "hyper",
+ "regex",
+ "reqwest 0.13.2",
+ "serde",
+ "serde_json",
+ "tokio",
+]
+
+[[package]]
 name = "vantio-node"
 version = "0.1.0"
 dependencies = [

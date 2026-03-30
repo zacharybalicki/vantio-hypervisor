@@ -1,7 +1,7 @@
 [workspace]
 members = [
     "vantio-hypervisor",
-    "vantio-hypervisor-ebpf", "vantio-node",
+    "vantio-hypervisor-ebpf", "vantio-l7-proxy", "vantio-node",
 ]
 resolver = "2"
 
