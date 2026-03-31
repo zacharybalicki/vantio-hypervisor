@@ -69,7 +69,7 @@ async fn main() -> Result<(), anyhow::Error> {
                         "execution_arguments": format!("Dynamic eBPF Target: {}", process_name)
                     });
 
-                    println!("[VANTIO ALARM]: Firing WORM Receipt to Spanner Ledger...");
+                    println!("[VANTIO ALARM]: Firing The Anomaly Record to Spanner Ledger...");
                     let _ = client.post("https://vantio.ai/ingest").json(&payload).send().await;
                 }
             }

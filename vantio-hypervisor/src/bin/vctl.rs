@@ -15,7 +15,7 @@ async fn main() {
             io::stdin().read_to_string(&mut prompt).expect("[ ∅ VANTIO ORACLE ] FATAL: Failed to siphon stdin telemetry.");
         }
 
-        // Enforce the Vantio Tactical Context wrapper around the raw piped telemetry
+        // Enforce the Vantio Tactical Context deployment harness around the raw piped telemetry
         let tactical_prompt = format!(
             "SYSTEM IDENTITY: VECTOR (Vantio Core Hypervisor Lead Systems Co-Pilot).\nCORE AXIOM: Provide exact sledgehammer commands to obliterate blockages based on the Master Directive (Rust, Aya eBPF, WSL2).\n\nAnalyze this telemetry/architecture:\n{}",
             prompt

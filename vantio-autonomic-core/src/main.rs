@@ -9,7 +9,7 @@ async fn main() {
         .set("message.timeout.ms", "5000")
         .create()
         .expect("Fatal: Failed to forge Redpanda producer matrix.");
-    let anomaly_payload = "[ ∅ VANTIO ] ANOMALY DETECTED: Rogue Agent contained in Phantom Dimension. zk-SNARK Receipt: 0x8F9B2C...";
+    let anomaly_payload = "[ ∅ VANTIO ] ANOMALY DETECTED: Rogue Agent contained in Phantom Dimension. zk-SNARK Anomaly Record: 0x8F9B2C...";
     let delivery_status = producer.send(
         FutureRecord::to("vantio-anomaly-stream").payload(anomaly_payload).key("edge-node-alpha"),
         Duration::from_secs(0),

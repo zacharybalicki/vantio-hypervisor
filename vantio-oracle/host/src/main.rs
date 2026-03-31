@@ -31,18 +31,18 @@ async fn intercept_payload(Json(payload): Json<Value>) -> String {
                 .unwrap();
 
             let prover = default_prover();
-            let receipt = prover.prove(env, VANTIO_GUEST_ELF).unwrap().receipt;
-            receipt.journal.decode().unwrap()
+            let anomaly_record = prover.prove(env, VANTIO_GUEST_ELF).unwrap().receipt;
+            anomaly_record.journal.decode().unwrap()
         };
 
         println!("=======================================================");
-        println!("[CRYPTOGRAPHIC SEAL VERIFIED & ENFORCED]");
+        println!("[ THE ANOMALY RECORD VERIFIED & ENFORCED ]");
         println!("GUEST ID: {:?}", VANTIO_GUEST_ID);
         println!("PROVEN THREAT: {}", proven_string);
         println!("=======================================================\n");
 
         // --- THE SPANNER UPLINK ---
-        println!("[VANTIO ORACLE]: Firing Cryptographic Receipt to Cloud Matrix...");
+        println!("[VANTIO ORACLE]: Firing The Anomaly Record to Cloud Matrix...");
         let client = reqwest::Client::new();
         
         let telemetry_payload = json!({

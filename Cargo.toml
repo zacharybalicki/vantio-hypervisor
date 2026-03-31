@@ -25,3 +25,9 @@ anyhow = "*"
 env_logger = "*"
 libc = "*"
 log = "*"
+
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"

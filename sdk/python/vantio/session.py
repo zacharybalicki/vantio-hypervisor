@@ -9,9 +9,9 @@ class VantioSession:
     def __enter__(self):
         # [ ∅ VANTIO ] Inject trace ID into OS environment for eBPF extraction
         os.environ["VANTIO_TRACE_ID"] = self.trace_id
-        print(f"[ ∅ VANTIO VECTOR ] Session Boundary Locked. Trace: {self.trace_id}")
+        print(f"[ ∅ PHANTOM ENGINE ] Session Boundary Locked. Trace: {self.trace_id}")
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         del os.environ["VANTIO_TRACE_ID"]
-        print(f"[ ∅ VANTIO VECTOR ] Session Boundary Terminated.")
+        print(f"[ ∅ PHANTOM ENGINE ] Session Boundary Terminated.")

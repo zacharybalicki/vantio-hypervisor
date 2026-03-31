@@ -23,8 +23,8 @@ fn main() {
         .prove(env, VANTIO_GUEST_ELF)
         .expect("Fatal Error: The zero-knowledge prover failed to execute the mathematical proof.");
 
-    // 5. Pierce the envelope and decode the WORM-compliant journal from the core receipt
-    let worm_journal: String = prove_info.receipt.journal.decode().unwrap();
+    // 5. Pierce the envelope and decode the The Anomaly Record from the core output
+    let anomaly_journal: String = prove_info.receipt.journal.decode().unwrap();
 
     println!("\n[ ∅ VANTIO ] CRYPTOGRAPHIC SHIELD HOLDING.");
     println!(">> {}", worm_journal);

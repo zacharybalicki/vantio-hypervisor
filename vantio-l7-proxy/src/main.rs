@@ -28,7 +28,7 @@ async fn intercept_payload(Json(payload): Json<Value>) -> Result<String, StatusC
         let client = Client::builder().timeout(Duration::from_secs(3)).build().unwrap();
         
         // Packaging the 7-Column Omniscience Payload for the Matrix
-        let receipt = serde_json::json!({
+        let anomaly_record = serde_json::json!({
             "pid": std::process::id(),
             "process_name": "vantio-l7-proxy",
             "status": "BLOCKED_AT_L7",
@@ -36,8 +36,8 @@ async fn intercept_payload(Json(payload): Json<Value>) -> Result<String, StatusC
             "execution_arguments": format!("Intercepted AI Payload: {}", payload.to_string())
         });
 
-        println!("[L7 ALARM]: Firing WORM Receipt to Spanner Ledger...");
-        let _ = client.post("https://vantio.ai/ingest").json(&receipt).send().await;
+        println!("[L7 ALARM]: Firing The Anomaly Record to Spanner Ledger...");
+        let _ = client.post("https://vantio.ai/ingest").json(&anomaly_record).send().await;
 
         return Err(StatusCode::FORBIDDEN);
     }
