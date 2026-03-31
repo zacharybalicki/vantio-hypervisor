@@ -12,7 +12,7 @@ Traditional cybersecurity relies on reactive, read-only dashboards. **Vantio** o
 ### ARCHITECTURE
 * **Edge Node Payload:** Pure Rust `aya` eBPF hypervisor attached to the `__x64_sys_execve` boundaries.
 * **Control Plane Monolith:** Decoupled Rust `axum` matrix synchronizing distributed Anomaly Records via Google Cloud Spanner.
-* **Execution:** `panic="abort"` — No standard library. No garbage collection. No non-deterministic wrappers.
+* **Execution:** `panic="abort"` — No standard library. No garbage collection. No non-deterministic deployment harness.
 
 ---
 *Built to mathematically prove Vantio is the undisputed operating system hypervisor for the Agentic Economy.*

@@ -14,4 +14,4 @@ A RISC-V zero-knowledge execution environment. Generates **The Anomaly Record**â
 The GKE-hosted Rust Axum API matrix (`vantio-node`). Ingests Edge Node telemetry via Google Cloud Spanner and renders the planetary Command Center HUD natively via isolated UI boundaries.
 
 ## 4. Monetization Engine (Infrastructure Licensing)
-Frame the architecture strictly around Custom ARR for isolated VPC Monolith Deployments. Abandon all SaaS metered API billing paradigms. Vantio is infrastructure, not a wrapper.
+Frame the architecture strictly around Custom ARR for isolated VPC Monolith Deployments. Abandon all SaaS metered API billing paradigms. Vantio is infrastructure, not a deployment harness.

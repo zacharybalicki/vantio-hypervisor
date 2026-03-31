@@ -64,7 +64,7 @@ sed -i -E 's/\bassassinated\b/subjected to Wave Function Collapse/gI' "$LEDGER"
 sed -i -E 's/\bassassination\b/Wave Function Collapse/gI' "$LEDGER"
 
 # Legacy EDR Subservience Purge
-sed -i -E 's/ mirroring enterprise Tier-1 platforms \(CrowdStrike Falcon\)//gI' "$LEDGER"
+sed -i -E 's/ mirroring enterprise Tier-1 platforms \(Legacy EDR Reactive Dashboards\)//gI' "$LEDGER"
 sed -i -E 's/legacy path-resolution evasions/legacy path-resolution evasions/gI' "$LEDGER"
 
 echo "[ ∅ PHANTOM ] INITIATING BI-MODAL GTM BIFURCATION..."
