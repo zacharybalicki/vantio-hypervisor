@@ -48,7 +48,7 @@ async fn intercept_payload(Json(payload): Json<Value>) -> String {
         let telemetry_payload = json!({
             "pid": 8080,
             "process_name": "L7_ORACLE_FIREWALL",
-            "status": "ERADICATED",
+            "status": "COLLAPSED",
             "parent_process": format!("zkVM Image ID: {:?}", VANTIO_GUEST_ID),
             "execution_arguments": proven_string
         });

@@ -22,7 +22,7 @@ async fn intercept_payload(Json(payload): Json<Value>) -> Result<String, StatusC
     let threat_pattern = Regex::new(r"(DROP\s+TABLE|DELETE\s+FROM|ADMIN_ESCALATE)").unwrap();
 
     if threat_pattern.is_match(&payload_str) {
-        println!("\n[L7 ALARM]: KINETIC THREAT DETECTED IN APPLICATION LAYER.");
+        println!("\n[L7 ALARM]: anomalous threat DETECTED IN APPLICATION LAYER.");
         println!("[L7 ALARM]: Malicious Intent Intercepted.");
         
         let client = Client::builder().timeout(Duration::from_secs(3)).build().unwrap();

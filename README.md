@@ -1,18 +1,29 @@
 # [ ∅ VANTIO ] // THE PHANTOM ENGINE
 **Absolute Determinism for the Agentic Economy.**
 
-Traditional cybersecurity relies on reactive, read-only dashboards. **Vantio** operates at **Ring-0 (eBPF)** and **Layer-7 (zkVM)**, acting as an immutable OS hypervisor. We do not monitor autonomous AI agents; we govern their reality.
+Traditional cybersecurity relies on reactive, read-only dashboards. Incumbents merely log the destruction of a production database *after* the fact. They are fundamentally blind to non-deterministic logic and hallucinations. **Vantio is an eBPF-powered OS hypervisor that physically prevents AI hallucinations from touching production reality.** We do not monitor reality; we govern it.
 
-### THE SOVEREIGN PROTOCOL
-* **The Phantom Fork (Kernel-Level CoW):** Autonomous AI agents execute payloads inside a zero-latency, isolated copy-on-write OS simulation.
-* **The Oracle (zkVM):** The resulting state mutation is evaluated in an isolated RISC Zero Zero-Knowledge Virtual Machine.
-* **Wave Function Collapse:** If an agent hallucinates a destructive command, the execution state is mathematically collapsed before the CPU grants a single clock cycle. Reality is preserved.
-* **The Anomaly Record:** Every collapsed threat generates a WORM-compliant cryptographic ledger entry, proving absolute human-in-the-loop compliance for Fortune 500 CISOs.
+## THE SOVEREIGN PROTOCOL (CORE PHYSICS)
+* **The Phantom Dimension (Kernel-Level CoW):** When an autonomous AI agent executes a command, Vantio intercepts it at Ring-0 (`__x64_sys_execve`) and shunts the execution into an isolated, zero-latency Copy-on-Write (CoW) OS simulation. 
+* **The Oracle (zkVM):** The agent's intent is evaluated against mathematical physics inside a RISC Zero Zero-Knowledge Virtual Machine. 
+* **Wave Function Collapse:** If the AI hallucinates a destructive action, Vantio mathematically collapses the execution state before the host CPU grants a single clock cycle. Reality remains pristine.
+* **The Anomaly Record:** Every collapse generates a cryptographically sealed, WORM-compliant proof of the hallucination. This proves human-in-the-loop safety without exposing PII.
 
-### ARCHITECTURE
-* **Edge Node Payload:** Pure Rust `aya` eBPF hypervisor attached to the `__x64_sys_execve` boundaries.
-* **Control Plane Monolith:** Decoupled Rust `axum` matrix synchronizing distributed Anomaly Records via Google Cloud Spanner.
-* **Execution:** `panic="abort"` — No standard library. No garbage collection. No non-deterministic deployment harness.
+## INFRASTRUCTURE & ARCHITECTURE
+* **Edge Node Payload:** Pure Rust `aya` eBPF hypervisor operating without standard libraries (`panic="abort"`). Utterly silent, zero-dependency Ring-0 physics.
+* **The Control Plane (Monolith):** A mathematically decoupled, pure Rust `axum` matrix natively serving the UI and API layer. 
+* **The Ledger:** Google Cloud Spanner acts as the TrueTime immutable vault for planetary-scale ingestion of Anomaly Records.
+
+## GO-TO-MARKET STRATEGY
+### TARGET 1: THE GRASSROOTS WEDGE (PLG)
+* **Audience:** Swarm engineers building via LangChain / AutoGen.
+* **Wedge:** The existential dread of an autonomous agent executing `rm -rf` on a local machine.
+* **Monetization Engine:** Telemetry Harvesting. The free CLI mines "Semantic Failure Vectors" from the developer swarm to dynamically train The Oracle.
+
+### TARGET 2: THE ENTERPRISE CONTROL PLANE
+* **Audience:** Fortune 500 CISOs, VPs of Engineering, Chief Risk Officers.
+* **Wedge:** SEC Rule 17a-4 Compliance and the terror of AI mutating production financial ledgers without cryptographic auditability.
+* **Monetization Engine:** Custom ARR Infrastructure Licensing for isolated VPC Monolith Deployments. No metered SaaS billing. 
 
 ---
 *Built to mathematically prove Vantio is the undisputed operating system hypervisor for the Agentic Economy.*

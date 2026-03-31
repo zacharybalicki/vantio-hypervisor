@@ -1,6 +1,0 @@
-/bin/nc
-/usr/bin/nc
-/bin/nc.openbsd
-/usr/bin/wget
-/usr/bin/curl
-/usr/bin/whoami

@@ -64,7 +64,7 @@ async fn main() -> Result<(), anyhow::Error> {
                     let payload = json!({
                         "pid": target_pid,
                         "process_name": process_name,
-                        "status": "ERADICATED",
+                        "status": "COLLAPSED",
                         "parent_process": format!("Context UID: {}", target_uid),
                         "execution_arguments": format!("Dynamic eBPF Target: {}", process_name)
                     });
