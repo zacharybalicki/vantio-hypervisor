@@ -58,7 +58,7 @@ async fn intercept_payload(Json(payload): Json<Value>) -> String {
             .send()
             .await;
 
-        return "{\"status\": \"ERADICATED\", \"reason\": \"CRYPTOGRAPHIC_SEAL_GENERATED\"}".to_string();
+        return "{\"status\": \"collapsed\", \"reason\": \"CRYPTOGRAPHIC_SEAL_GENERATED\"}".to_string();
     }
 
     println!("[L7 PROXY]: Payload benign. Forwarding to LLM...");

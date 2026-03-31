@@ -68,7 +68,6 @@ async fn main() -> Result<(), anyhow::Error> {
                 let events = buf.read_events(&mut buffers).await.unwrap();
                 for i in 0..events.read {
                     let buf = &mut buffers[i];
-                    
                     let target_pid = u32::from_ne_bytes(buf[0..4].try_into().unwrap());
                     let target_uid = u32::from_ne_bytes(buf[4..8].try_into().unwrap());
                     let process_name = String::from_utf8_lossy(&buf[8..24]).trim_matches('\0').to_string();
