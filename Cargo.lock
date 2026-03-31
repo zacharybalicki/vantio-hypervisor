@@ -2836,6 +2836,7 @@ dependencies = [
  "aya-log",
  "bytes",
  "env_logger",
+ "regex",
  "reqwest 0.13.2",
  "serde_json",
  "tokio",
