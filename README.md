@@ -1,33 +1,18 @@
-# 🛡️ Vantio: Bare-Metal eBPF Execution Shield (Edge Node)
+# [ ∅ VANTIO ] // THE PHANTOM ENGINE
+**Absolute Determinism for the Agentic Economy.**
 
-**Absolute Kernel Supremacy. Open-Source by Design.**
+Traditional cybersecurity relies on reactive, read-only dashboards. **Vantio** operates at **Ring-0 (eBPF)** and **Layer-7 (zkVM)**, acting as an immutable OS hypervisor. We do not monitor autonomous AI agents; we govern their reality.
 
-Vantio is a high-performance, bare-metal hypervisor that mathematically annihilates rogue execution processes in real-time before they breach the Linux kernel scheduler. Built entirely in Rust and eBPF, the Vantio Edge Node acts as a frictionless, zero-latency execution shield for modern CI/CD pipelines and AI-driven infrastructure.
+### THE SOVEREIGN PROTOCOL
+* **The Phantom Fork (Kernel-Level CoW):** Autonomous AI agents execute payloads inside a zero-latency, isolated copy-on-write OS simulation.
+* **The Oracle (zkVM):** The resulting state mutation is evaluated in an isolated RISC Zero Zero-Knowledge Virtual Machine.
+* **Wave Function Collapse:** If an agent hallucinates a destructive command, the execution state is mathematically collapsed before the CPU grants a single clock cycle. Reality is preserved.
+* **The Anomaly Record:** Every collapsed threat generates a WORM-compliant cryptographic ledger entry, proving absolute human-in-the-loop compliance for Fortune 500 CISOs.
 
-## 🧠 The Architecture (The Physics)
-This repository contains the core physics engine of the Vantio architecture. It operates purely at the Linux Kernel layer:
-1. **eBPF Tracepoints (`sched:sched_process_exec`):** Intercepts execution vectors at the exact millisecond a process requests kernel scheduling.
-2. **The Neural Bridge (`PerfEventArray`):** Establishes a high-speed, zero-copy memory map between kernel space and the Rust user-space executioner.
-3. **Asynchronous Eradication:** Instantly triggers a `SIGKILL (9)` protocol against unauthorized processes, freezing them in stasis before execution begins.
+### ARCHITECTURE
+* **Edge Node Payload:** Pure Rust `aya` eBPF hypervisor attached to the `__x64_sys_execve` boundaries.
+* **Control Plane Monolith:** Decoupled Rust `axum` matrix synchronizing distributed Anomaly Records via Google Cloud Spanner.
+* **Execution:** `panic="abort"` — No standard library. No garbage collection. No non-deterministic wrappers.
 
-## 🔓 The Trust Deficit & Our Open-Core Philosophy
-We believe in **Zero-Trust Kernel Execution**. You cannot protect your infrastructure if you don't trust the agent guarding it. No sane engineer will grant a closed-source startup root access to their production kernels.
-
-We open-sourced the Vantio Edge Node so the global security community can audit the syscall interceptions, verify the execution logic, and deploy the agent with SLSA Level 4 supply-chain confidence. **We open-source the physics, but we monetize the Oracle.**
-
-You can deploy our eBPF agent locally to protect your immediate workflow with zero latency and zero cost. 
-
-## ⚡ Quick Start (The Chaos Harness)
-
-**Prerequisites:** Linux kernel with eBPF support, Rust toolkit, `bpftool`, and Clang/LLVM.
-
-```bash
-# 1. Clone the repository
-git clone [https://github.com/vantio/vantio-hypervisor.git](https://github.com/vantio/vantio-hypervisor.git)
-cd vantio-hypervisor
-
-# 2. Forge the Executioner
-cargo build --package vantio-node --release
-
-# 3. Ignite the Edge Node (Requires Root)
-RUST_LOG=info sudo -E ./target/release/vantio-node
+---
+*Built to mathematically prove Vantio is the undisputed operating system hypervisor for the Agentic Economy.*
