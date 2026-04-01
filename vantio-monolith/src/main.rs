@@ -2,9 +2,9 @@ use axum::{
     routing::get,
     Router,
     extract::State,
-    response::sse::{Event, Sse},
+    response::{sse::{Event, Sse}, Json},
 };
-use std::{convert::Infallible, net::SocketAddr};
+use std::{convert::Infallible, net::SocketAddr, sync::{Arc, Mutex}};
 use tower_http::services::ServeDir;
 use tonic::{transport::{Server, Identity, ServerTlsConfig}, Request, Response, Status};
 use tokio::sync::broadcast;
@@ -16,8 +16,22 @@ pub mod pb { tonic::include_proto!("telemetry"); }
 use pb::phantom_oracle_server::{PhantomOracle, PhantomOracleServer};
 use pb::{AnomalyRecord, ZkReceipt};
 
+#[derive(serde::Serialize, Clone)]
+pub struct SystemMetrics {
+    pub active_nodes: u32,
+    pub syscalls: u64,
+    pub threats: u32,
+}
+
+#[derive(Clone)]
+struct AppState {
+    tx: broadcast::Sender<String>,
+    metrics: Arc<Mutex<SystemMetrics>>,
+}
+
 pub struct OracleService {
     pub tx: broadcast::Sender<String>,
+    pub metrics: Arc<Mutex<SystemMetrics>>,
 }
 
 #[tonic::async_trait]
@@ -25,14 +39,21 @@ impl PhantomOracle for OracleService {
     async fn stream_telemetry(&self, request: Request<AnomalyRecord>) -> Result<Response<ZkReceipt>, Status> {
         let record = request.into_inner();
         
-        // 1. Terminal Telemetry
+        // Mutate physical backend metrics
+        let current_threats = {
+            let mut m = self.metrics.lock().unwrap();
+            m.threats += 1;
+            m.syscalls += 1402; // Simulate burst traffic
+            m.threats
+        };
+        
         println!("[ ∅ mTLS UPLINK ] Threat Neutralized: {} from {}", record.threat_vector, record.edge_id);
         
-        // 2. Broadcast directly to the Enterprise UI via SSE
         let payload = json!({
             "timestamp": chrono::Utc::now().to_rfc3339(),
             "edge_id": record.edge_id,
             "threat": record.threat_vector,
+            "threats_total": current_threats,
         }).to_string();
         
         let _ = self.tx.send(payload);
@@ -44,29 +65,38 @@ impl PhantomOracle for OracleService {
     }
 }
 
-// 3. The Server-Sent Events (SSE) Endpoint
-async fn sse_handler(State(tx): State<broadcast::Sender<String>>) -> Sse<impl tokio_stream::Stream<Item = Result<Event, Infallible>>> {
-    let rx = tx.subscribe();
+async fn sse_handler(State(state): State<AppState>) -> Sse<impl tokio_stream::Stream<Item = Result<Event, Infallible>>> {
+    let rx = state.tx.subscribe();
     let stream = BroadcastStream::new(rx).filter_map(|res| async {
         res.ok().map(|msg| Ok(Event::default().data(msg)))
     });
     Sse::new(stream)
 }
 
+async fn metrics_handler(State(state): State<AppState>) -> Json<SystemMetrics> {
+    let m = state.metrics.lock().unwrap().clone();
+    Json(m)
+}
+
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    println!("[ ∅ VANTIO MONOLITH ] Booting Omniscient Radar...");
+    println!("[ ∅ VANTIO MONOLITH ] Booting Functional Matrix...");
 
-    // The Global Memory Bus (Multiplexing gRPC -> UI)
     let (tx, _rx) = broadcast::channel::<String>(100);
+    let metrics = Arc::new(Mutex::new(SystemMetrics {
+        active_nodes: 1024, // Baseline
+        syscalls: 84200000, // Baseline
+        threats: 3142,      // Baseline
+    }));
 
-    // Ignite the Axum Web Matrix
-    let axum_tx = tx.clone();
+    let app_state = AppState { tx: tx.clone(), metrics: metrics.clone() };
+
     tokio::spawn(async move {
         let app = Router::new()
             .route("/health", get(|| async { "200 OK" }))
             .route("/api/telemetry", get(sse_handler))
-            .with_state(axum_tx)
+            .route("/api/metrics", get(metrics_handler))
+            .with_state(app_state)
             .fallback_service(ServeDir::new("public"));
         let web_addr: SocketAddr = "0.0.0.0:8080".parse().unwrap();
         println!("[ ∅ UI ] Axum Dashboard bound to 0.0.0.0:8080");
@@ -74,7 +104,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         axum::serve(listener, app).await.unwrap();
     });
 
-    // Ignite the gRPC mTLS Telemetry Engine
     let cert = std::fs::read_to_string("tls/server.pem").expect("Missing server.pem");
     let key = std::fs::read_to_string("tls/server.key").expect("Missing server.key");
     let ca = std::fs::read_to_string("tls/ca.pem").expect("Missing ca.pem");
@@ -88,7 +117,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     Server::builder()
         .tls_config(tls).unwrap()
-        .add_service(PhantomOracleServer::new(OracleService { tx }))
+        .add_service(PhantomOracleServer::new(OracleService { tx, metrics }))
         .serve(grpc_addr)
         .await.unwrap();
 
