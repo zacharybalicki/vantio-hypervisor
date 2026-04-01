@@ -1,0 +1,18 @@
+syntax = "proto3";
+package telemetry;
+
+message AnomalyRecord {
+    string edge_id = 1;
+    string process_name = 2;
+    string threat_vector = 3;
+    bytes payload = 4;
+}
+
+message ZkReceipt {
+    bool acknowledged = 1;
+    string receipt_hash = 2;
+}
+
+service PhantomOracle {
+    rpc StreamTelemetry (AnomalyRecord) returns (ZkReceipt);
+}

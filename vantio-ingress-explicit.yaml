@@ -1,0 +1,31 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: vantio-global-ingress
+  annotations:
+    kubernetes.io/ingress.class: "gce"
+    networking.gke.io/managed-certificates: "vantio-tls-cert"
+    kubernetes.io/ingress.global-static-ip-name: "vantio-global-ip"
+    networking.gke.io/v1beta1.FrontendConfig: "vantio-https-redirect"
+spec:
+  rules:
+  - host: "vantio.ai"
+    http:
+      paths:
+      - path: /*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: vantio-monolith-gateway
+            port:
+              number: 80
+  - host: "www.vantio.ai"
+    http:
+      paths:
+      - path: /*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: vantio-monolith-gateway
+            port:
+              number: 80
