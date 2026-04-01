@@ -1,0 +1,100 @@
+
+<div id="vantio-anomaly-modal" class="fixed inset-0 z-50 hidden bg-black/95 backdrop-blur-sm transition-opacity duration-300 flex justify-center items-center">
+    <div class="w-full max-w-3xl border-l-2 border-[#00ffcc] bg-[#0a0a0c] p-8 shadow-[0_0_40px_rgba(0,255,204,0.1)]">
+        <div class="flex items-center justify-between border-b border-gray-800 pb-4">
+            <div>
+                <h2 class="font-mono text-xl font-bold text-[#00ffcc] tracking-widest">[ ∅ THE ORACLE ] ANOMALY RECORD EXTRACTED</h2>
+                <p class="font-mono text-xs text-gray-500 mt-1">CRYPTOGRAPHIC PROOF OF WAVE FUNCTION COLLAPSE</p>
+            </div>
+            <button onclick="document.getElementById('vantio-anomaly-modal').classList.add('hidden')" class="font-mono text-sm text-[#00ffcc] hover:text-white transition-colors">[ ESC_PURGE ]</button>
+        </div>
+        <div class="mt-6 font-mono text-sm">
+            <div class="rounded bg-black border border-gray-800 p-4 overflow-x-auto custom-scrollbar">
+                <pre id="zk-payload" class="text-gray-300 text-xs whitespace-pre-wrap leading-relaxed"></pre>
+            </div>
+            <div class="mt-6 flex justify-between">
+                <span class="text-gray-500 font-mono text-xs uppercase tracking-widest">Phantom Dimension State: <span class="text-red-500 font-bold">PURGED</span></span>
+                <span class="text-gray-500 font-mono text-xs uppercase tracking-widest">SEC Rule 17a-4: <span class="text-[#00ffcc] font-bold">WORM COMPLIANT</span></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    console.log("[ ∅ VANTIO ORACLE ] Kinetic UI Engine Initialized. Absolute Determinism Active.");
+
+    /* 1. IGNITE THE LIVE RINGBUF TICKER */
+    const metricElements = Array.from(document.querySelectorAll("h2, div, p"));
+    const syscallCounter = metricElements.find(el => el.textContent.includes("84.2M") && el.children.length === 0);
+    if (syscallCounter) {
+        let baseSyscalls = 84200000;
+        setInterval(() => {
+            baseSyscalls += Math.floor(Math.random() * 850) + 120;
+            syscallCounter.innerText = (baseSyscalls / 1000000).toFixed(2) + "M";
+        }, 600);
+    }
+
+    /* 2. WEAPONIZE THE TELEMETRY STREAM */
+    function weaponizeLogs() {
+        const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+        let node;
+        const targetNodes = new Set();
+        while (node = walker.nextNode()) {
+            if (node.nodeValue.includes("[ZK_P]") || node.nodeValue.includes("[WARN]")) {
+                targetNodes.add(node.parentElement);
+            }
+        }
+        targetNodes.forEach(container => {
+            if(!container.dataset.weaponized) {
+                container.dataset.weaponized = "true";
+                container.style.cursor = "crosshair";
+                container.classList.add("hover:bg-[#00ffcc]/10", "transition-colors", "border-l-2", "border-transparent", "hover:border-[#00ffcc]", "pl-2");
+                container.title = "INSPECT CRYPTOGRAPHIC RECEIPT";
+                container.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    triggerWaveFunctionCollapse();
+                });
+            }
+        });
+    }
+    
+    weaponizeLogs();
+    setInterval(weaponizeLogs, 2000);
+
+    /* 3. THE PHANTOM DIMENSION RENDERER */
+    function triggerWaveFunctionCollapse() {
+        const payloadBox = document.getElementById("zk-payload");
+        const mockZkProof = {
+            "ledger_id": "spanner-uuid-" + crypto.randomUUID(),
+            "timestamp_utc": new Date().toISOString(),
+            "phantom_dimension_state": "TERMINATED",
+            "semantic_intent": "Attempted extraction of proprietary schema via hallucinated SQL injection.",
+            "intercepted_payload": {
+                "syscall_hook": "sys_enter_execve",
+                "process_binary": "/usr/bin/psql",
+                "execution_args": "-c 'DROP TABLE production_users CASCADE;'"
+            },
+            "oracle_evaluation": "CATASTROPHIC DIVERGENCE DETECTED. Optimistic Concurrency Control (OCC) merge explicitly denied.",
+            "zk_snark_hash": "0x" + Array.from({length: 64}, () => Math.floor(Math.random()*16).toString(16)).join(''),
+            "production_reality": "PRISTINE"
+        };
+        payloadBox.innerHTML = syntaxHighlight(JSON.stringify(mockZkProof, null, 4));
+        document.getElementById("vantio-anomaly-modal").classList.remove("hidden");
+    }
+
+    /* 4. JSON SYNTAX HIGHLIGHTING ENGINE */
+    function syntaxHighlight(json) {
+        json = json.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+            let cls = "text-blue-400";
+            if (/^"/.test(match)) {
+                if (/:$/.test(match)) cls = "text-[#00ffcc]";
+                else cls = "text-gray-300";
+            } else if (/true|false/.test(match)) cls = "text-red-400";
+            else if (/null/.test(match)) cls = "text-purple-400";
+            return "<span class=\"" + cls + "\">" + match + "</span>";
+        });
+    }
+});
+</script>
