@@ -21,8 +21,8 @@ def parse_commit(data):
     return d, tag, title.strip(), desc.strip(), tc
 
 def main():
-    # EXPLICITLY TARGETING dashboard.html
-    idx = "vantio-monolith/public/dashboard.html"
+    # EXPLICITLY TARGETING index.html
+    idx = "vantio-monolith/public/index.html"
     arc = "vantio-monolith/public/telemetry_archive.html"
     
     if not os.path.exists(idx):

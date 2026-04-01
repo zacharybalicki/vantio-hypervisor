@@ -1,0 +1,23 @@
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: vantio-tls-cert
+spec:
+  domains:
+    - vantio.ai
+    - www.vantio.ai
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: vantio-global-ingress
+  annotations:
+    kubernetes.io/ingress.class: "gce"
+    networking.gke.io/managed-certificates: "vantio-tls-cert"
+    kubernetes.io/ingress.global-static-ip-name: "vantio-global-ip"
+spec:
+  defaultBackend:
+    service:
+      name: vantio-monolith-gateway
+      port:
+        number: 80
