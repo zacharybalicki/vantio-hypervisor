@@ -11,36 +11,36 @@
 </head>
 <body class="font-sans min-h-screen selection:bg-brand-500 selection:text-white">
     <nav class="border-b border-dark-border bg-[#0a0a0c]/80 backdrop-blur-md sticky top-0 z-50">
-        <div class="max-w-[1600px] mx-auto px-6 h-16 flex items-center justify-between">
-            <a href="/" class="font-mono font-bold text-xl tracking-widest text-white flex items-center gap-3">
-                <div class="w-2.5 h-2.5 bg-brand-500 rounded-full"></div> VANTIO<span class="text-brand-500">.DOCS</span>
+        <div class="max-w-[1000px] mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="/" class="font-mono font-bold text-lg sm:text-xl tracking-widest text-white flex items-center gap-3">
+                <div class="w-2.5 h-2.5 bg-brand-500 rounded-full animate-pulse shadow-[0_0_10px_#14b8a6]"></div> VANTIO<span class="text-brand-500">.DOCS</span>
             </a>
-            <a href="/" class="text-sm font-medium text-brand-400 hover:text-white transition-colors border border-brand-500/30 px-4 py-1.5 rounded bg-brand-500/10">Return to Matrix →</a>
+            <a href="/" class="text-xs sm:text-sm font-medium text-black hover:bg-zinc-200 transition-colors border border-transparent px-4 py-2 rounded bg-white font-bold">Return to Matrix →</a>
         </div>
     </nav>
-    <div class="max-w-[1000px] mx-auto px-6 py-16 flex flex-col gap-12">
+    <div class="max-w-[1000px] mx-auto px-6 py-12 sm:py-16 flex flex-col gap-10 sm:gap-12">
         <div>
-            <h1 class="text-5xl font-bold text-white mb-6 tracking-tight">Enterprise Architecture</h1>
-            <p class="text-zinc-400 leading-relaxed text-lg">The mathematical foundations of the Vantio Zero-Trust Matrix. Completely eradicating network latency by pushing semantic evaluation into the Linux Kernel.</p>
+            <h1 class="text-3xl sm:text-5xl font-bold text-white mb-4 sm:mb-6 tracking-tight">Enterprise Architecture</h1>
+            <p class="text-zinc-400 leading-relaxed text-sm sm:text-lg">The mathematical foundations of the Vantio Zero-Trust Matrix. Completely eradicating network latency by pushing semantic evaluation into the Linux Kernel.</p>
         </div>
         
-        <div class="space-y-8">
-            <div class="bg-[#0a0a0c] p-8 rounded-2xl border border-dark-border shadow-lg border-l-4 border-l-brand-500">
-                <h2 class="text-2xl font-bold text-white mb-4 font-mono flex items-center gap-3">I. KERNEL PHYSICS (eBPF)</h2>
-                <p class="text-zinc-400 leading-relaxed mb-6">Vantio operates entirely in the Linux Ring-0 kernel space. It intercepts system calls using the <code>bprm_check_security</code> Linux Security Module (LSM) hook. It utilizes a zero-allocation <code>BPF RingBuf</code> memory bus to evaluate and freeze semantic CPU execution paths instantly, avoiding the massive context-switch overhead required by legacy userspace tools.</p>
-                <div class="bg-black p-5 rounded-lg font-mono text-xs text-brand-400 border border-dark-border overflow-x-auto whitespace-pre">#[map] static VANTIO_EVENTS: RingBuf = RingBuf::with_byte_size(256 * 1024, 0);</div>
+        <div class="space-y-6 sm:space-y-8">
+            <div class="bg-[#0a0a0c] p-6 sm:p-8 rounded-2xl border border-dark-border shadow-lg border-l-4 border-l-brand-500 hover:-translate-y-1 transition-transform">
+                <h2 class="text-lg sm:text-2xl font-bold text-white mb-4 font-mono flex items-center gap-3">I. KERNEL PHYSICS (eBPF)</h2>
+                <p class="text-zinc-400 text-xs sm:text-base leading-relaxed mb-6">Vantio operates entirely in the Linux Ring-0 kernel space. It intercepts system calls using the <code>bprm_check_security</code> Linux Security Module (LSM) hook. It utilizes a zero-allocation <code>BPF RingBuf</code> memory bus to evaluate and freeze semantic CPU execution paths instantly, avoiding the massive context-switch overhead required by legacy userspace tools.</p>
+                <div class="bg-black p-4 sm:p-5 rounded-lg font-mono text-[10px] sm:text-xs text-brand-400 border border-dark-border overflow-x-auto whitespace-pre">#[map] static VANTIO_EVENTS: RingBuf = RingBuf::with_byte_size(256 * 1024, 0);</div>
             </div>
 
-            <div class="bg-[#0a0a0c] p-8 rounded-2xl border border-dark-border shadow-lg border-l-4 border-l-blue-500">
-                <h2 class="text-2xl font-bold text-white mb-4 font-mono flex items-center gap-3">II. ZERO-TRUST NEURAL UPLINK</h2>
-                <p class="text-zinc-400 leading-relaxed mb-6">Unlike legacy JSON HTTP architectures, Vantio strictly requires a 4096-bit X.509 v3 Client Certificate to establish a connection to the Control Plane. Telemetry is serialized via Protocol Buffers over a Mutual TLS (mTLS) HTTP/2 gRPC tunnel.</p>
-                <div class="bg-black p-5 rounded-lg font-mono text-xs text-blue-400 border border-dark-border overflow-x-auto whitespace-pre">export VANTIO_GRPC_ENDPOINT="https://136.119.36.18:50051"</div>
+            <div class="bg-[#0a0a0c] p-6 sm:p-8 rounded-2xl border border-dark-border shadow-lg border-l-4 border-l-blue-500 hover:-translate-y-1 transition-transform">
+                <h2 class="text-lg sm:text-2xl font-bold text-white mb-4 font-mono flex items-center gap-3">II. ZERO-TRUST NEURAL UPLINK</h2>
+                <p class="text-zinc-400 text-xs sm:text-base leading-relaxed mb-6">Unlike legacy JSON HTTP architectures, Vantio strictly requires a 4096-bit X.509 v3 Client Certificate to establish a connection to the Control Plane. Telemetry is serialized via Protocol Buffers over a Mutual TLS (mTLS) HTTP/2 gRPC tunnel.</p>
+                <div class="bg-black p-4 sm:p-5 rounded-lg font-mono text-[10px] sm:text-xs text-blue-400 border border-dark-border overflow-x-auto whitespace-pre">export VANTIO_GRPC_ENDPOINT="https://136.119.36.18:50051"</div>
             </div>
 
-            <div class="bg-[#0a0a0c] p-8 rounded-2xl border border-dark-border shadow-lg border-l-4 border-l-rose-500">
-                <h2 class="text-2xl font-bold text-white mb-4 font-mono flex items-center gap-3">III. OMNISCIENT CONTROL PLANE</h2>
-                <p class="text-zinc-400 leading-relaxed mb-6">A shell-less Distroless container running <code>Axum</code> and <code>Tonic</code> concurrently on a Google Kubernetes Engine (GKE) cluster. Features a lockless <code>tokio::sync::broadcast</code> memory channel that pipes intercepted eBPF threats directly to the dashboard via Server-Sent Events (SSE).</p>
-                <div class="bg-black p-5 rounded-lg font-mono text-xs text-rose-400 border border-dark-border overflow-x-auto whitespace-pre">let (tx, _rx) = broadcast::channel::&lt;String&gt;(100);</div>
+            <div class="bg-[#0a0a0c] p-6 sm:p-8 rounded-2xl border border-dark-border shadow-lg border-l-4 border-l-rose-500 hover:-translate-y-1 transition-transform">
+                <h2 class="text-lg sm:text-2xl font-bold text-white mb-4 font-mono flex items-center gap-3">III. OMNISCIENT CONTROL PLANE</h2>
+                <p class="text-zinc-400 text-xs sm:text-base leading-relaxed mb-6">A shell-less Distroless container running <code>Axum</code> and <code>Tonic</code> concurrently on a Google Kubernetes Engine (GKE) cluster. Features a lockless <code>tokio::sync::broadcast</code> memory channel that pipes intercepted eBPF threats directly to the dashboard via Server-Sent Events (SSE).</p>
+                <div class="bg-black p-4 sm:p-5 rounded-lg font-mono text-[10px] sm:text-xs text-rose-400 border border-dark-border overflow-x-auto whitespace-pre">let (tx, _rx) = broadcast::channel::&lt;String&gt;(100);</div>
             </div>
         </div>
     </div>

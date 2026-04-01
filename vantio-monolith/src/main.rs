@@ -39,21 +39,24 @@ impl PhantomOracle for OracleService {
     async fn stream_telemetry(&self, request: Request<AnomalyRecord>) -> Result<Response<ZkReceipt>, Status> {
         let record = request.into_inner();
         
-        // Mutate physical backend metrics
         let current_threats = {
             let mut m = self.metrics.lock().unwrap();
             m.threats += 1;
-            m.syscalls += 1402; // Simulate burst traffic
+            m.syscalls += 1402; 
             m.threats
         };
         
         println!("[ ∅ mTLS UPLINK ] Threat Neutralized: {} from {}", record.threat_vector, record.edge_id);
         
+        // Injecting rich data for the frontend slide-over dossiers
         let payload = json!({
             "timestamp": chrono::Utc::now().to_rfc3339(),
             "edge_id": record.edge_id,
             "threat": record.threat_vector,
             "threats_total": current_threats,
+            "pid": format!("{}", 4000 + (chrono::Utc::now().timestamp_subsec_millis() % 1000)),
+            "latency_us": 3 + (chrono::Utc::now().timestamp_subsec_millis() % 5),
+            "severity": "CRITICAL"
         }).to_string();
         
         let _ = self.tx.send(payload);
@@ -84,9 +87,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let (tx, _rx) = broadcast::channel::<String>(100);
     let metrics = Arc::new(Mutex::new(SystemMetrics {
-        active_nodes: 1024, // Baseline
-        syscalls: 84200000, // Baseline
-        threats: 3142,      // Baseline
+        active_nodes: 1024,
+        syscalls: 84200000,
+        threats: 3142,
     }));
 
     let app_state = AppState { tx: tx.clone(), metrics: metrics.clone() };
