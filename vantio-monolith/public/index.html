@@ -191,27 +191,29 @@
 
     <script>
         const terminal = document.getElementById('terminal-logs');
-        const logs = [
-            `<div class="mb-1.5 flex gap-3"><span class="text-zinc-600 shrink-0">[${new Date().toISOString().split('T')[1].slice(0,8)}]</span> <span class="text-brand-400 shrink-0 w-16">[eBPF]</span> <span class="text-zinc-300">RingBuf zero-allocation packet captured. Overhead: 3μs.</span></div>`,
-            `<div class="mb-1.5 flex gap-3"><span class="text-zinc-600 shrink-0">[${new Date().toISOString().split('T')[1].slice(0,8)}]</span> <span class="text-blue-400 shrink-0 w-16">[EDGE]</span> <span class="text-zinc-300">Anycast Ingress Request validated via Cloud Load Balancer.</span></div>`,
-            `<div class="mb-1.5 flex gap-3"><span class="text-zinc-600 shrink-0">[${new Date().toISOString().split('T')[1].slice(0,8)}]</span> <span class="text-amber-400 shrink-0 w-16">[WARN]</span> <span class="text-zinc-300">Semantic hallucination detected. Awaiting Oracle validation...</span></div>`,
-            `<div class="mb-1.5 flex gap-3"><span class="text-zinc-600 shrink-0">[${new Date().toISOString().split('T')[1].slice(0,8)}]</span> <span class="text-brand-400 shrink-0 w-16">[CORE]</span> <span class="text-zinc-300">Async threat analysis completed. Thread marked safe.</span></div>`,
-            `<div class="mb-1.5 flex gap-3"><span class="text-zinc-600 shrink-0">[${new Date().toISOString().split('T')[1].slice(0,8)}]</span> <span class="text-rose-500 font-bold shrink-0 w-16">[KILL]</span> <span class="text-zinc-200">Wave Function Collapse Executed on PID 4402 (rm -rf attempt).</span></div>`,
-            `<div class="mb-1.5 flex gap-3"><span class="text-zinc-600 shrink-0">[${new Date().toISOString().split('T')[1].slice(0,8)}]</span> <span class="text-purple-400 shrink-0 w-16">[ZK_P]</span> <span class="text-zinc-300">Cryptographic anomaly record forged to permanent ledger.</span></div>`
-        ];
+        terminal.innerHTML = '<div class="mb-1.5 text-brand-400 font-bold">[SYSTEM] Vantio SSE Radar Online. Awaiting Edge Telemetry...</div>';
 
-        setInterval(() => {
-            const randomLog = logs[Math.floor(Math.random() * logs.length)];
+        const evtSource = new EventSource('/api/telemetry');
+        
+        evtSource.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            const time = new Date(data.timestamp).toISOString().split('T')[1].slice(0,8);
+            
+            const html = '<div class="mb-1.5 flex gap-3 animate-pulse"><span class="text-zinc-600 shrink-0">[' + time + ']</span> <span class="text-rose-500 font-bold shrink-0 w-16">[KILL]</span> <span class="text-zinc-200">' + data.edge_id + ' <span class="text-brand-500">intercepted</span> ' + data.threat + '</span></div>';
+            
             const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = randomLog;
+            tempDiv.innerHTML = html;
             terminal.appendChild(tempDiv.firstChild);
             
             terminal.scrollTop = terminal.scrollHeight;
-            
             if (terminal.children.length > 50) {
                 terminal.removeChild(terminal.children[1]); 
             }
-        }, 2200);
-    </script>
+        };
+        
+        evtSource.onerror = function() {
+            console.log('[!] SSE Stream interrupted. Reconnecting...');
+        };
+</script>
 </body>
 </html>
