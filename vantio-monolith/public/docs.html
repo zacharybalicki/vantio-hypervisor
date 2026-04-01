@@ -3,14 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VANTIO | Documentation</title>
+    <title>VANTIO | Enterprise Architecture Documentation</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    <script>tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { 400: '#2dd4bf', 500: '#14b8a6' }, dark: { bg: '#050505', panel: '#0a0a0c', border: '#1f1f22' } }, fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] } } } }</script>
-    <style>body { background-color: #050505; color: #e5e5e5; overflow-x: hidden; }</style>
+    <script>
+        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { 400: '#2dd4bf', 500: '#14b8a6' }, dark: { bg: '#050505', panel: '#0a0a0c', border: '#1f1f22' } }, fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] } } } }
+    </script>
+    <style>
+        body { background-color: #050505; color: #e5e5e5; overflow-x: hidden; }
+        .bg-grid { background-size: 40px 40px; background-image: linear-gradient(to right, rgba(20, 184, 166, 0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(20, 184, 166, 0.04) 1px, transparent 1px); position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+        .term-scroll::-webkit-scrollbar { width: 4px; } .term-scroll::-webkit-scrollbar-track { background: transparent; } .term-scroll::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+        
+        #slide-backdrop { transition: opacity 0.3s ease; opacity: 0; pointer-events: none; }
+        #slide-backdrop.active { opacity: 1; pointer-events: auto; }
+        #slide-panel { transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); transform: translateX(100%); }
+        #slide-panel.active { transform: translateX(0); }
+        
+        .arch-card { cursor: pointer; transition: all 0.2s ease; position: relative; overflow: hidden; }
+        .arch-card:hover { transform: translateY(-4px); }
+        .arch-card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent); transform: translateX(-100%); transition: transform 0.5s ease; }
+        .arch-card:hover::after { transform: translateX(100%); }
+    </style>
 </head>
 <body class="font-sans min-h-screen selection:bg-brand-500 selection:text-white">
-    <nav class="border-b border-dark-border bg-[#0a0a0c]/80 backdrop-blur-md sticky top-0 z-50">
+    <div class="bg-grid"></div>
+    
+    <nav class="border-b border-dark-border bg-[#0a0a0c]/80 backdrop-blur-md sticky top-0 z-40">
         <div class="max-w-[1000px] mx-auto px-6 h-16 flex items-center justify-between">
             <a href="/" class="font-mono font-bold text-lg sm:text-xl tracking-widest text-white flex items-center gap-3">
                 <div class="w-2.5 h-2.5 bg-brand-500 rounded-full animate-pulse shadow-[0_0_10px_#14b8a6]"></div> VANTIO<span class="text-brand-500">.DOCS</span>
@@ -18,31 +36,162 @@
             <a href="/" class="text-xs sm:text-sm font-medium text-black hover:bg-zinc-200 transition-colors border border-transparent px-4 py-2 rounded bg-white font-bold">Return to Matrix →</a>
         </div>
     </nav>
-    <div class="max-w-[1000px] mx-auto px-6 py-12 sm:py-16 flex flex-col gap-10 sm:gap-12">
+    
+    <div class="max-w-[1000px] mx-auto px-6 py-12 sm:py-16 flex flex-col gap-10 sm:gap-12 relative z-10">
         <div>
             <h1 class="text-3xl sm:text-5xl font-bold text-white mb-4 sm:mb-6 tracking-tight">Enterprise Architecture</h1>
-            <p class="text-zinc-400 leading-relaxed text-sm sm:text-lg">The mathematical foundations of the Vantio Zero-Trust Matrix. Completely eradicating network latency by pushing semantic evaluation into the Linux Kernel.</p>
+            <p class="text-zinc-400 leading-relaxed text-sm sm:text-lg">The mathematical foundations of the Vantio Zero-Trust Matrix. Click any pillar to deploy the deep-dive Go-To-Market Intelligence Dossier.</p>
         </div>
         
         <div class="space-y-6 sm:space-y-8">
-            <div class="bg-[#0a0a0c] p-6 sm:p-8 rounded-2xl border border-dark-border shadow-lg border-l-4 border-l-brand-500 hover:-translate-y-1 transition-transform">
-                <h2 class="text-lg sm:text-2xl font-bold text-white mb-4 font-mono flex items-center gap-3">I. KERNEL PHYSICS (eBPF)</h2>
+            <div onclick="openDocsDossier('kernel')" class="arch-card bg-[#0a0a0c] p-6 sm:p-8 rounded-2xl border border-dark-border shadow-lg border-l-4 border-l-brand-500 group hover:shadow-[0_0_30px_rgba(20,184,166,0.15)]">
+                <div class="flex justify-between items-start">
+                    <h2 class="text-lg sm:text-2xl font-bold text-white mb-4 font-mono flex items-center gap-3">I. KERNEL PHYSICS (eBPF)</h2>
+                    <span class="text-[9px] sm:text-[10px] font-mono text-brand-400 border border-brand-500/30 bg-brand-500/10 px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity uppercase tracking-widest">Deploy Dossier ↗</span>
+                </div>
                 <p class="text-zinc-400 text-xs sm:text-base leading-relaxed mb-6">Vantio operates entirely in the Linux Ring-0 kernel space. It intercepts system calls using the <code>bprm_check_security</code> Linux Security Module (LSM) hook. It utilizes a zero-allocation <code>BPF RingBuf</code> memory bus to evaluate and freeze semantic CPU execution paths instantly, avoiding the massive context-switch overhead required by legacy userspace tools.</p>
                 <div class="bg-black p-4 sm:p-5 rounded-lg font-mono text-[10px] sm:text-xs text-brand-400 border border-dark-border overflow-x-auto whitespace-pre">#[map] static VANTIO_EVENTS: RingBuf = RingBuf::with_byte_size(256 * 1024, 0);</div>
             </div>
 
-            <div class="bg-[#0a0a0c] p-6 sm:p-8 rounded-2xl border border-dark-border shadow-lg border-l-4 border-l-blue-500 hover:-translate-y-1 transition-transform">
-                <h2 class="text-lg sm:text-2xl font-bold text-white mb-4 font-mono flex items-center gap-3">II. ZERO-TRUST NEURAL UPLINK</h2>
+            <div onclick="openDocsDossier('mtls')" class="arch-card bg-[#0a0a0c] p-6 sm:p-8 rounded-2xl border border-dark-border shadow-lg border-l-4 border-l-blue-500 group hover:shadow-[0_0_30px_rgba(59,130,246,0.15)]">
+                <div class="flex justify-between items-start">
+                    <h2 class="text-lg sm:text-2xl font-bold text-white mb-4 font-mono flex items-center gap-3">II. ZERO-TRUST NEURAL UPLINK</h2>
+                    <span class="text-[9px] sm:text-[10px] font-mono text-blue-400 border border-blue-500/30 bg-blue-500/10 px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity uppercase tracking-widest">Deploy Dossier ↗</span>
+                </div>
                 <p class="text-zinc-400 text-xs sm:text-base leading-relaxed mb-6">Unlike legacy JSON HTTP architectures, Vantio strictly requires a 4096-bit X.509 v3 Client Certificate to establish a connection to the Control Plane. Telemetry is serialized via Protocol Buffers over a Mutual TLS (mTLS) HTTP/2 gRPC tunnel.</p>
                 <div class="bg-black p-4 sm:p-5 rounded-lg font-mono text-[10px] sm:text-xs text-blue-400 border border-dark-border overflow-x-auto whitespace-pre">export VANTIO_GRPC_ENDPOINT="https://136.119.36.18:50051"</div>
             </div>
 
-            <div class="bg-[#0a0a0c] p-6 sm:p-8 rounded-2xl border border-dark-border shadow-lg border-l-4 border-l-rose-500 hover:-translate-y-1 transition-transform">
-                <h2 class="text-lg sm:text-2xl font-bold text-white mb-4 font-mono flex items-center gap-3">III. OMNISCIENT CONTROL PLANE</h2>
+            <div onclick="openDocsDossier('plane')" class="arch-card bg-[#0a0a0c] p-6 sm:p-8 rounded-2xl border border-dark-border shadow-lg border-l-4 border-l-rose-500 group hover:shadow-[0_0_30px_rgba(244,63,94,0.15)]">
+                <div class="flex justify-between items-start">
+                    <h2 class="text-lg sm:text-2xl font-bold text-white mb-4 font-mono flex items-center gap-3">III. OMNISCIENT CONTROL PLANE</h2>
+                    <span class="text-[9px] sm:text-[10px] font-mono text-rose-400 border border-rose-500/30 bg-rose-500/10 px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity uppercase tracking-widest">Deploy Dossier ↗</span>
+                </div>
                 <p class="text-zinc-400 text-xs sm:text-base leading-relaxed mb-6">A shell-less Distroless container running <code>Axum</code> and <code>Tonic</code> concurrently on a Google Kubernetes Engine (GKE) cluster. Features a lockless <code>tokio::sync::broadcast</code> memory channel that pipes intercepted eBPF threats directly to the dashboard via Server-Sent Events (SSE).</p>
                 <div class="bg-black p-4 sm:p-5 rounded-lg font-mono text-[10px] sm:text-xs text-rose-400 border border-dark-border overflow-x-auto whitespace-pre">let (tx, _rx) = broadcast::channel::&lt;String&gt;(100);</div>
             </div>
         </div>
     </div>
+
+    <div id="slide-backdrop" class="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm" onclick="closeSlideOver()"></div>
+    <div id="slide-panel" class="fixed inset-y-0 right-0 w-full sm:w-[450px] md:w-[600px] bg-[#0a0a0c] border-l border-dark-border shadow-[0_0_50px_rgba(0,0,0,0.8)] z-[70] flex flex-col">
+        <div class="px-5 sm:px-8 py-5 border-b border-dark-border bg-black/50 flex justify-between items-start shrink-0">
+            <div>
+                <h2 class="text-xl sm:text-2xl font-bold text-white font-mono tracking-tight flex items-center gap-3" id="slide-title">Title</h2>
+                <p class="text-xs text-brand-400 mt-2 font-mono uppercase tracking-widest" id="slide-subtitle">Subtitle</p>
+            </div>
+            <button onclick="closeSlideOver()" class="text-zinc-500 hover:text-white bg-zinc-800/50 hover:bg-zinc-700/50 p-2 rounded-md transition-colors mt-0.5"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+        </div>
+        <div class="p-5 sm:p-8 overflow-y-auto flex-1 term-scroll" id="slide-content"></div>
+    </div>
+
+    <script>
+        const slideBackdrop = document.getElementById('slide-backdrop');
+        const slidePanel = document.getElementById('slide-panel');
+        const slideTitle = document.getElementById('slide-title');
+        const slideSubtitle = document.getElementById('slide-subtitle');
+        const slideContent = document.getElementById('slide-content');
+
+        function closeSlideOver() { slideBackdrop.classList.remove('active'); slidePanel.classList.remove('active'); document.body.style.overflow = ''; }
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSlideOver(); });
+
+        function openDocsDossier(type) {
+            let html, title, subtitle, color;
+            
+            if(type === 'kernel') {
+                title = '<div class="w-3 h-3 bg-brand-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(20,184,166,0.5)]"></div> Kernel Physics (eBPF)';
+                subtitle = 'THE MATHEMATICS OF ZERO-LATENCY INTERCEPTION';
+                color = 'text-brand-400';
+                html = `
+                    <div class="space-y-8 font-sans">
+                        <div>
+                            <h3 class="text-white font-bold text-lg mb-2">The Legacy Userspace Bottleneck</h3>
+                            <p class="text-zinc-400 text-sm leading-relaxed">Traditional cybersecurity agents (CrowdStrike, Datadog) operate in <strong>Ring-3 Userspace</strong>. When a process executes a system call (like reading a file or opening a network port), the CPU must physically halt execution, switch context into the kernel, verify the action, switch context back to userspace, ask the security agent if the action is malicious, switch back to the kernel, and finally grant permission.</p>
+                            <p class="text-zinc-400 text-sm leading-relaxed mt-3">This context-switch ping-pong adds <strong>10,000+ microseconds of latency per system call.</strong> On a high-throughput enterprise database, this overhead causes catastrophic transaction degradation.</p>
+                        </div>
+                        
+                        <div class="bg-brand-500/10 border border-brand-500/30 p-5 rounded-xl shadow-[0_0_15px_rgba(20,184,166,0.1)]">
+                            <h3 class="text-brand-400 font-bold mb-2 font-mono flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> The Vantio Advantage: Ring-0 Execution</h3>
+                            <p class="text-zinc-300 text-sm leading-relaxed mb-4">Vantio bypasses Userspace entirely. We compile pure-Rust logic directly into bytecode and inject it straight into the <strong>Ring-0 Linux Kernel</strong> via eBPF (Extended Berkeley Packet Filter).</p>
+                            <ul class="text-zinc-400 text-xs sm:text-sm font-mono space-y-3">
+                                <li class="flex items-start gap-2"><span class="text-emerald-400">✓</span> <strong>Zero Context Switching:</strong> Threats are evaluated exactly where they are generated.</li>
+                                <li class="flex items-start gap-2"><span class="text-emerald-400">✓</span> <strong>Sub-Microsecond Latency:</strong> Vantio executes the <code>bprm_check_security</code> hook in < 2.5µs.</li>
+                                <li class="flex items-start gap-2"><span class="text-emerald-400">✓</span> <strong>Zero-Allocation Memory:</strong> Telemetry is passed asynchronously to userspace via a lockless <code>BPF RingBuf</code>, meaning zero dynamic heap allocations and zero memory leaks.</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-white font-bold text-lg mb-3">Semantic Hallucination Halting</h3>
+                            <p class="text-zinc-400 text-sm leading-relaxed">Because Vantio has total visibility over memory execution paths, it can execute a <strong>Wave Function Collapse</strong> on malicious prompt injections or SQL payloads. The semantic threat is literally wiped from kernel memory before the CPU ever acknowledges the process existed.</p>
+                        </div>
+                    </div>`;
+            } 
+            else if(type === 'mtls') {
+                title = '<div class="w-3 h-3 bg-blue-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(59,130,246,0.5)]"></div> Mutual TLS Uplink';
+                subtitle = 'MATHEMATICALLY IMPENETRABLE TRANSIT';
+                color = 'text-blue-400';
+                html = `
+                    <div class="space-y-8 font-sans">
+                        <div>
+                            <h3 class="text-white font-bold text-lg mb-2">The JSON/REST Vulnerability</h3>
+                            <p class="text-zinc-400 text-sm leading-relaxed">Legacy architecture relies on Edge Nodes sending telemetry to the Control Plane via JSON payloads over standard HTTP POST requests. This leaves the system inherently vulnerable to schema drift, Man-In-The-Middle (MITM) attacks, and Edge Node spoofing.</p>
+                        </div>
+                        
+                        <div class="bg-blue-500/10 border border-blue-500/30 p-5 rounded-xl shadow-[0_0_15px_rgba(59,130,246,0.1)]">
+                            <h3 class="text-blue-400 font-bold mb-2 font-mono flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg> The Vantio Advantage: mTLS + Protobuf</h3>
+                            <p class="text-zinc-300 text-sm leading-relaxed mb-4">Vantio abandons standard HTTP entirely. We operate a dedicated, encrypted <strong>Layer-4 TCP tunnel</strong> utilizing Mutual Transport Layer Security (mTLS).</p>
+                            <ul class="text-zinc-400 text-xs sm:text-sm font-mono space-y-3">
+                                <li class="flex items-start gap-2"><span class="text-emerald-400">✓</span> <strong>Bidirectional Cryptography:</strong> The Control Plane mathematically refuses connections from any node that does not possess a 4096-bit X.509 v3 Client Certificate signed by the proprietary Vantio Root CA.</li>
+                                <li class="flex items-start gap-2"><span class="text-emerald-400">✓</span> <strong>SAN Enforcement:</strong> Certificates enforce strict Subject Alternative Name (SAN) IP bindings, rendering DNS-spoofing impossible.</li>
+                                <li class="flex items-start gap-2"><span class="text-emerald-400">✓</span> <strong>Binary Payload Encoding:</strong> JSON is eradicated. Threat signatures are strictly typed and serialized into Google Protocol Buffers, reducing network payload sizes by 80% and protecting the control plane from schema injection vulnerabilities.</li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-white font-bold text-lg mb-3">Pure-Rust \`rustls\` Cryptography</h3>
+                            <p class="text-zinc-400 text-sm leading-relaxed">Unlike OpenSSL, which is written in C and historically prone to buffer overflow zero-days (Heartbleed), Vantio utilizes <code>rustls</code>—a memory-safe, pure-Rust cryptographic engine that executes entirely within the Distroless container vacuum.</p>
+                        </div>
+                    </div>`;
+            }
+            else if(type === 'plane') {
+                title = '<div class="w-3 h-3 bg-rose-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(244,63,94,0.5)]"></div> Omniscient Plane';
+                subtitle = 'ZERO-LATENCY KUBERNETES GTM COMMAND CENTER';
+                color = 'text-rose-500';
+                html = `
+                    <div class="space-y-8 font-sans">
+                        <div>
+                            <h3 class="text-white font-bold text-lg mb-2">The Static Dashboard Problem</h3>
+                            <p class="text-zinc-400 text-sm leading-relaxed">Most security dashboards require the user to refresh the page to see new threats, or they rely on resource-heavy Websocket pollers that crush backend memory when scaling to thousands of concurrent CISO viewers.</p>
+                        </div>
+                        
+                        <div class="bg-rose-500/10 border border-rose-500/30 p-5 rounded-xl shadow-[0_0_15px_rgba(244,63,94,0.1)]">
+                            <h3 class="text-rose-500 font-bold mb-2 font-mono flex items-center gap-2"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg> The Vantio Advantage: The Axum SSE Matrix</h3>
+                            <p class="text-zinc-300 text-sm leading-relaxed mb-4">The Vantio Monolith is a dual-port multiplexer written in pure Rust. It concurrently runs the gRPC Threat Tunnel on Port 50051, and the Enterprise UI on Port 8080.</p>
+                            <ul class="text-zinc-400 text-xs sm:text-sm font-mono space-y-3">
+                                <li class="flex items-start gap-2"><span class="text-emerald-400">✓</span> <strong>Lockless Memory Channel:</strong> When a threat arrives over gRPC, the backend instantly pushes it into an asynchronous <code>tokio::sync::broadcast</code> channel without locking the primary execution thread.</li>
+                                <li class="flex items-start gap-2"><span class="text-emerald-400">✓</span> <strong>Server-Sent Events (SSE):</strong> The Axum frontend subscribes directly to the broadcast channel. The UI receives real-time, unidirectional threat data with near-zero latency, avoiding standard Websocket handshake overhead.</li>
+                                <li class="flex items-start gap-2"><span class="text-emerald-400">✓</span> <strong>Distroless Vacuum:</strong> The entire backend is compiled to a static binary and executed inside a Google <code>distroless/cc</code> container, meaning there are zero shell utilities (bash, curl, wget) for an attacker to leverage, achieving absolute container security.</li>
+                            </ul>
+                        </div>
+                    </div>`;
+            }
+            
+            slideTitle.innerHTML = title;
+            slideSubtitle.className = `text-[10px] sm:text-xs mt-2 font-mono uppercase tracking-widest ${color}`;
+            slideSubtitle.innerText = subtitle;
+            slideContent.innerHTML = html;
+            
+            let borderClass = 'border-dark-border';
+            if(color.includes('brand')) borderClass = 'border-brand-500/50';
+            else if(color.includes('rose')) borderClass = 'border-rose-500/50';
+            else if(color.includes('blue')) borderClass = 'border-blue-500/50';
+            
+            slidePanel.className = `fixed inset-y-0 right-0 w-full sm:w-[450px] md:w-[600px] bg-[#0a0a0c] border-l shadow-[0_0_50px_rgba(0,0,0,0.8)] z-[70] flex flex-col slide-panel ${borderClass}`;
+            
+            slideBackdrop.classList.add('active');
+            slidePanel.classList.add('active');
+            document.body.style.overflow = 'hidden'; 
+        }
+    </script>
 </body>
 </html>
