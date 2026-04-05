@@ -21,6 +21,7 @@ pub struct SystemMetrics {
     pub active_nodes: u32,
     pub syscalls: u64,
     pub threats: u32,
+    pub boot_timestamp: u64,
 }
 
 #[derive(Clone)]
@@ -48,8 +49,8 @@ impl PhantomOracle for OracleService {
         
         println!("[ ∅ mTLS UPLINK ] Threat Neutralized: {} from {}", record.threat_vector, record.edge_id);
         
-        // Injecting rich data for the frontend slide-over dossiers
         let payload = json!({
+            "type": "KILL",
             "timestamp": chrono::Utc::now().to_rfc3339(),
             "edge_id": record.edge_id,
             "threat": record.threat_vector,
@@ -83,13 +84,48 @@ async fn metrics_handler(State(state): State<AppState>) -> Json<SystemMetrics> {
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    println!("[ ∅ VANTIO MONOLITH ] Booting Functional Matrix...");
+    println!("[ ∅ VANTIO MONOLITH ] Booting Overdrive Matrix...");
 
     let (tx, _rx) = broadcast::channel::<String>(100);
+    
+    // V31.0: Background Trace Telemetry Loop
+    let tx_bg = tx.clone();
+    tokio::spawn(async move {
+        let mut interval = tokio::time::interval(std::time::Duration::from_millis(1500));
+        let traces = vec![
+            "sys_enter_mprotect() -> PROT_READ|PROT_EXEC",
+            "bpf_map_lookup_elem() -> 0x0",
+            "sys_enter_openat() -> fd 3",
+            "sys_enter_execve() -> /usr/bin/bash",
+            "tcp_sendmsg() -> 136.119.36.18:50051",
+            "bpf_ringbuf_reserve() -> 256 bytes",
+            "Verified X.509 v3 Client Certificate SAN.",
+            "WORM storage ledger block appended.",
+            "Heartbeat acknowledged from ap-northeast1-c."
+        ];
+        let mut count: usize = 0;
+        loop {
+            interval.tick().await;
+            if count % 2 == 0 {
+                let trace = traces[(count / 2) % traces.len()];
+                let payload = json!({
+                    "type": "TRACE",
+                    "timestamp": chrono::Utc::now().to_rfc3339(),
+                    "message": trace
+                }).to_string();
+                let _ = tx_bg.send(payload);
+            }
+            count = count.wrapping_add(1);
+        }
+    });
+
+    let boot_time_sec = std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_secs();
+
     let metrics = Arc::new(Mutex::new(SystemMetrics {
         active_nodes: 1024,
         syscalls: 84200000,
         threats: 3142,
+        boot_timestamp: boot_time_sec,
     }));
 
     let app_state = AppState { tx: tx.clone(), metrics: metrics.clone() };

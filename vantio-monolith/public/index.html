@@ -8,22 +8,12 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: { brand: { 400: '#2dd4bf', 500: '#14b8a6' }, dark: { bg: '#050505', panel: '#0a0a0c', border: '#1f1f22' } },
-                    fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
-                    animation: { 'fade-in-up': 'fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards' },
-                    keyframes: { fadeInUp: { '0%': { opacity: 0, transform: 'translateY(15px)' }, '100%': { opacity: 1, transform: 'translateY(0)' } } }
-                }
-            }
-        }
+        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { 400: '#2dd4bf', 500: '#14b8a6' }, dark: { bg: '#050505', panel: '#0a0a0c', border: '#1f1f22' } }, fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] }, animation: { 'fade-in-up': 'fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards' }, keyframes: { fadeInUp: { '0%': { opacity: 0, transform: 'translateY(15px)' }, '100%': { opacity: 1, transform: 'translateY(0)' } } } } }
     </script>
     <style>
         body { background-color: #050505; color: #e5e5e5; overflow-x: hidden; }
         .bg-grid { background-size: 40px 40px; background-image: linear-gradient(to right, rgba(20, 184, 166, 0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(20, 184, 166, 0.04) 1px, transparent 1px); mask-image: linear-gradient(to bottom, black 40%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%); position: fixed; inset: 0; z-index: -1; pointer-events: none; }
-        .glass-panel { background: rgba(10, 10, 12, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--tw-colors-dark-border); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); }
+        .glass-panel { background: rgba(10, 10, 12, 0.7); backdrop-filter: blur(20px); border: 1px solid var(--tw-colors-dark-border); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); }
         .pulse-dot { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; box-shadow: 0 0 12px #14b8a6; } 50% { opacity: .4; box-shadow: none; } }
         .term-scroll::-webkit-scrollbar { width: 4px; } .term-scroll::-webkit-scrollbar-track { background: transparent; } .term-scroll::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; } .term-scroll::-webkit-scrollbar-thumb:hover { background: #555; }
@@ -31,13 +21,9 @@
         #slide-backdrop { transition: opacity 0.3s ease; opacity: 0; pointer-events: none; } #slide-backdrop.active { opacity: 1; pointer-events: auto; }
         #slide-panel { transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); transform: translateX(100%); } #slide-panel.active { transform: translateX(0); }
         .interactive-log { cursor: pointer; transition: all 0.2s ease; border-left: 2px solid transparent; } .interactive-log:hover { background: rgba(244, 63, 94, 0.1); border-left: 4px solid #f43f5e; padding-left: 8px; }
-        .interactive-row { cursor: pointer; transition: all 0.2s ease; }
-        .metric-card { cursor: pointer; transition: all 0.2s ease; } .metric-card:active { transform: scale(0.98); }
+        .interactive-row, .metric-card { cursor: pointer; transition: all 0.2s ease; } .metric-card:active { transform: scale(0.98); }
         .metric-hover-text { opacity: 0; transform: translateY(10px); transition: all 0.3s ease; } .group:hover .metric-hover-text { opacity: 1; transform: translateY(0); }
-        #mobile-menu { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; } #mobile-menu.open { max-height: 250px; }
-        
-        /* PIXEL PERFECT MATRIX TOPOGRAPHY PILLS */
-        .pill-badge { padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; font-family: 'JetBrains Mono', monospace; cursor: pointer; transition: all 0.2s ease; }
+        .pill-badge { padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; font-family: 'JetBrains Mono', monospace; transition: all 0.2s ease; cursor: pointer; }
         .pill-outline { border: 1px solid #3f3f46; background: rgba(39, 39, 42, 0.4); color: #d4d4d8; } .pill-outline:hover { border-color: #71717a; background: rgba(39, 39, 42, 0.8); }
         .pill-teal { border: 1px solid rgba(20, 184, 166, 0.5); background: rgba(20, 184, 166, 0.15); color: #2dd4bf; } .pill-teal:hover { border-color: rgba(20, 184, 166, 0.8); background: rgba(20, 184, 166, 0.25); }
     </style>
@@ -49,26 +35,21 @@
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center gap-3 sm:gap-4">
                     <div class="w-2.5 h-2.5 bg-brand-500 rounded-full pulse-dot shrink-0"></div>
-                    <span class="font-mono font-bold text-lg md:text-xl tracking-widest text-white truncate">VANTIO<span class="text-brand-500">.OS</span></span>
-                    <span class="hidden min-[400px]:block ml-2 sm:ml-4 px-2.5 py-1 rounded-md text-[9px] sm:text-[10px] font-mono bg-brand-500/10 text-brand-400 border border-brand-500/20 tracking-widest">ENTERPRISE APEX</span>
+                    <span class="font-mono font-bold text-lg md:text-xl tracking-widest text-white truncate cursor-pointer hover:text-brand-300 transition-colors" onclick="window.location.reload()">VANTIO<span class="text-brand-500">.OS</span></span>
+                    <span onclick="openSystemDossier('apex')" class="hidden min-[400px]:block ml-2 sm:ml-4 px-2.5 py-1 rounded-md text-[9px] sm:text-[10px] font-mono bg-brand-500/10 text-brand-400 border border-brand-500/30 hover:bg-brand-500/20 hover:text-brand-300 hover:border-brand-500/50 transition-colors tracking-widest shadow-[0_0_10px_rgba(20,184,166,0.1)] group cursor-pointer">
+                        ENTERPRISE APEX <span class="opacity-0 group-hover:opacity-100 transition-opacity ml-1">&nearr;</span>
+                    </span>
                 </div>
                 <div class="hidden md:flex items-center gap-6 lg:gap-8">
                     <a href="https://github.com/zacharybalicki/vantio-hypervisor" target="_blank" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors flex items-center gap-1.5"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg> Open-Core Engine</a>
                     <a href="docs.html" class="text-sm font-medium text-zinc-400 hover:text-white transition-colors mr-2">Documentation</a>
                     
-                    <div class="border border-[#1f1f22] bg-[#050505]/80 px-3 py-1.5 rounded-md flex items-center gap-2 font-mono text-xs text-zinc-400 cursor-default">
-                        <svg class="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        SYS_UPTIME: <span id="uptime-ticker" class="text-zinc-300 font-bold tabular-nums">100.00%</span>
+                    <div onclick="openSystemDossier('uptime')" class="cursor-pointer border border-[#1f1f22] hover:border-emerald-500/50 bg-[#050505]/80 hover:bg-[#0a0a0c] px-3 py-1.5 rounded-md flex items-center gap-2 font-mono text-xs text-zinc-400 transition-all shadow-[0_0_10px_rgba(0,0,0,0.3)] hover:shadow-[0_0_15px_rgba(16,185,129,0.15)] group">
+                        <svg class="w-4 h-4 text-emerald-500 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        SYS_UPTIME: <span class="uptime-ticker text-emerald-400 font-bold tabular-nums">100.00%</span>
+                        <span class="opacity-0 group-hover:opacity-100 transition-opacity text-emerald-500">&nearr;</span>
                     </div>
                 </div>
-                <button class="md:hidden text-zinc-400 hover:text-white p-2" onclick="document.getElementById('mobile-menu').classList.toggle('open')"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg></button>
-            </div>
-        </div>
-        <div id="mobile-menu" class="md:hidden bg-dark-panel border-b border-dark-border absolute top-16 left-0 w-full shadow-2xl z-50 max-h-0 overflow-hidden transition-all duration-300">
-            <div class="px-6 py-4 flex flex-col gap-4">
-                <a href="https://github.com/zacharybalicki/vantio-hypervisor" target="_blank" class="text-sm font-medium text-zinc-300 flex items-center gap-2">Open-Core Engine</a>
-                <a href="docs.html" class="text-sm font-medium text-zinc-300">Documentation</a>
-                <div class="flex items-center gap-2 text-xs font-mono text-zinc-300 bg-black px-3 py-1.5 rounded-lg border border-dark-border w-fit"><svg class="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> SYS_UPTIME: <span class="uptime-ticker text-white">100.00%</span></div>
             </div>
         </div>
     </nav>
@@ -93,7 +74,6 @@
                     </div>
                     <h3 class="text-3xl lg:text-4xl font-bold text-white mb-2 font-mono tabular-nums" id="metric-nodes">...</h3>
                 </div>
-                <p class="text-xs text-brand-400 flex items-center gap-1 font-mono mt-3"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg> Perfect Heartbeat</p>
             </div>
             
             <div onclick="openMetricDossier('syscalls')" class="metric-card glass-panel p-5 md:p-6 rounded-xl border-t-2 border-t-blue-500 relative overflow-hidden group hover:bg-dark-panel/80 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(59,130,246,0.15)] flex flex-col justify-between">
@@ -104,7 +84,6 @@
                     </div>
                     <h3 class="text-3xl lg:text-4xl font-bold text-white mb-2 font-mono tabular-nums" id="metric-syscalls">...</h3>
                 </div>
-                <p class="text-xs text-blue-400 flex items-center gap-1 font-mono mt-3">Zero Latency Degradation</p>
             </div>
             
             <div onclick="openMetricDossier('threats')" class="metric-card glass-panel p-5 md:p-6 rounded-xl border-t-2 border-t-rose-500 relative overflow-hidden group hover:bg-dark-panel/80 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(244,63,94,0.15)] flex flex-col justify-between">
@@ -115,7 +94,6 @@
                     </div>
                     <h3 class="text-3xl lg:text-4xl font-bold text-rose-500 mb-2 font-mono tabular-nums transition-all duration-300" id="metric-threats">...</h3>
                 </div>
-                <p class="text-xs text-rose-400 flex items-center gap-1 font-mono mt-3">Wave Functions Collapsed</p>
             </div>
             
             <div onclick="openMetricDossier('ringbuf')" class="metric-card glass-panel p-5 md:p-6 rounded-xl border-t-2 border-t-indigo-500 relative overflow-hidden group hover:bg-dark-panel/80 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(99,102,241,0.15)] flex flex-col justify-between">
@@ -126,19 +104,23 @@
                     </div>
                     <h3 class="text-3xl lg:text-4xl font-bold text-white mb-2 font-mono">0-ALLOC</h3>
                 </div>
-                <p class="text-xs text-indigo-400 flex items-center gap-1 font-mono mt-3">Lockless Array Active</p>
             </div>
         </div>
 
         <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 sm:gap-8 animate-fade-in-up opacity-0-init delay-200">
             <div class="xl:col-span-2 flex flex-col gap-6">
-                <div class="glass-panel rounded-xl p-4 sm:p-5 h-[180px] sm:h-[220px] shadow-2xl flex flex-col relative overflow-hidden cursor-pointer group" onclick="openDocsDossier('kernel')">
+                <div class="glass-panel rounded-xl p-4 sm:p-5 h-[180px] sm:h-[220px] shadow-2xl flex flex-col relative overflow-hidden cursor-pointer group border border-dark-border hover:border-brand-500/40 transition-colors" onclick="openSystemDossier('radar')">
                     <div class="flex justify-between items-center mb-2 shrink-0 relative z-10">
-                        <span class="text-[10px] sm:text-[11px] font-mono font-bold text-zinc-300 uppercase tracking-widest group-hover:text-brand-300 transition-colors">Syscall Velocity Radar (Hz)</span>
+                        <div class="flex gap-2 items-center">
+                            <span class="text-[10px] sm:text-[11px] font-mono font-bold text-zinc-300 uppercase tracking-widest group-hover:text-brand-300 transition-colors">Syscall Velocity Radar <span class="opacity-0 group-hover:opacity-100 transition-opacity">&nearr;</span></span>
+                        </div>
                         <div class="flex items-center gap-3">
+                            <div class="flex items-center gap-2 mr-2">
+                                <span class="w-2 h-2 bg-[#14b8a6] rounded-full"></span><span class="text-[9px] text-zinc-400 font-mono hidden sm:inline">execve()</span>
+                                <span class="w-2 h-2 bg-[#3b82f6] rounded-full ml-2"></span><span class="text-[9px] text-zinc-400 font-mono hidden sm:inline">openat()</span>
+                            </div>
                             <div class="bg-black/50 border border-dark-border px-2 py-0.5 rounded text-[9px] font-mono text-zinc-400 hidden sm:block">AVG: <span id="radar-avg" class="text-brand-400 font-bold tabular-nums">0.0K</span></div>
                             <div class="bg-black/50 border border-dark-border px-2 py-0.5 rounded text-[9px] font-mono text-zinc-400 hidden sm:block">PEAK: <span id="radar-peak" class="text-rose-400 font-bold tabular-nums">0.0K</span></div>
-                            <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse shadow-[0_0_8px_#14b8a6]"></span>
                         </div>
                     </div>
                     <div class="relative w-full flex-1 min-h-0 z-10"><canvas id="velocityChart"></canvas></div>
@@ -151,18 +133,19 @@
                             <span class="text-[10px] md:text-[11px] font-mono font-bold text-white uppercase tracking-widest sm:ml-2">Live eBPF Telemetry Stream</span>
                         </div>
                         <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+                            <button onclick="terminalFilter()" id="btn-filter" class="text-brand-400 hover:text-brand-300 transition-colors" title="Toggle Traces"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg></button>
+                            <button onclick="terminalPause()" id="btn-pause" class="text-zinc-500 hover:text-rose-500 transition-colors" title="Pause Stream"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></button>
                             <button onclick="terminalClear()" class="text-zinc-500 hover:text-white transition-colors" title="Clear Logs"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
-                            <button onclick="terminalPause()" id="btn-pause" class="text-zinc-500 hover:text-white transition-colors" title="Pause Stream"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></button>
                             <span class="text-[9px] md:text-[10px] font-mono bg-brand-500/10 text-brand-400 px-2 py-1 rounded border border-brand-500/20 shadow-[0_0_10px_rgba(20,184,166,0.1)] flex items-center gap-1.5 ml-2">
-                                <span class="w-1.5 h-1.5 rounded-full bg-brand-500 animate-pulse" id="term-pulse"></span> <span id="term-status">TUNNEL LOCK</span>
+                                <span class="w-1.5 h-1.5 rounded-full bg-brand-500 animate-pulse" id="term-pulse"></span> <span id="term-status" class="hidden sm:inline">TUNNEL LOCK</span>
                             </span>
                         </div>
                     </div>
                     <div class="p-3 md:p-5 bg-black flex-1 overflow-y-auto term-scroll font-mono text-[11px] md:text-[12px] leading-relaxed relative z-10 shadow-[inset_0_0_30px_rgba(0,0,0,1)]" id="terminal-logs">
-                        <div class="mb-1 text-zinc-500">Initializing Vantio Telemetry Engine...</div>
-                        <div class="mb-1"><span class="text-brand-400">[SYSTEM]</span> GKE Anycast Load Balancer secured via Managed SSL.</div>
-                        <div class="mb-1"><span class="text-blue-400">[ORACLE]</span> Background Kernel Radar Interception Active.</div>
-                        <div class="mb-2 font-bold text-brand-500 mt-3 border-l-2 border-brand-500 pl-3 bg-brand-500/5 py-1">[ ∅ VANTIO ] OVERDRIVE MATRIX ONLINE. AWAITING UPLINK.</div>
+                        <div class="mb-1 text-zinc-500 font-bold border-l-2 border-zinc-500 pl-2 mx-1">Initializing Vantio Telemetry Engine...</div>
+                        <div class="mb-1 text-zinc-500 border-l-2 border-zinc-500 pl-2 mx-1"><span class="text-brand-400">[SYSTEM]</span> GKE Anycast Load Balancer secured via Managed SSL.</div>
+                        <div class="mb-1 text-zinc-500 border-l-2 border-zinc-500 pl-2 mx-1"><span class="text-blue-400">[ORACLE]</span> Background Kernel Radar Interception Active.</div>
+                        <div class="mb-2 font-bold text-brand-500 mt-3 border-l-2 border-brand-500 pl-3 bg-brand-500/5 py-1 mx-1">[ ∅ VANTIO ] OVERDRIVE MATRIX ONLINE. AWAITING UPLINK.</div>
                     </div>
                 </div>
             </div>
@@ -178,15 +161,16 @@
                     </div>
                 </div>
 
-                <div class="glass-panel rounded-xl overflow-hidden flex flex-col flex-1 bg-black">
-                    <div class="bg-[#050505] px-5 py-4 border-b border-[#1f1f22] flex justify-between items-center">
-                        <span class="text-[10px] font-mono font-bold text-white uppercase tracking-widest">MATRIX TOPOGRAPHY</span>
+                <div class="glass-panel rounded-xl overflow-hidden flex flex-col flex-1 bg-black cursor-pointer group hover:border-zinc-700 transition-colors" onclick="openSystemDossier('topography')">
+                    <div class="bg-[#050505] px-5 py-4 border-b border-[#1f1f22] flex justify-between items-center group-hover:bg-[#0a0a0c] transition-colors">
+                        <span class="text-[10px] font-mono font-bold text-white uppercase tracking-widest group-hover:text-brand-300 transition-colors">MATRIX TOPOGRAPHY</span>
+                        <span class="text-[9px] font-mono text-zinc-500 opacity-0 group-hover:opacity-100 transition-opacity font-bold">INSPECT ↗</span>
                     </div>
                     <div class="p-5 font-mono text-[11px] space-y-4 flex-1 flex flex-col justify-center relative">
                         <div class="flex justify-between items-center"><span class="text-zinc-500 font-semibold tracking-wide">HOST OS</span><span class="text-zinc-200 font-bold">Distroless Void</span></div>
-                        <div class="flex justify-between items-center"><span class="text-zinc-500 font-semibold tracking-wide">LSM HOOK</span><span class="pill-badge pill-outline" onclick="openDocsDossier('kernel')">bprm_check_security</span></div>
+                        <div class="flex justify-between items-center"><span class="text-zinc-500 font-semibold tracking-wide">LSM HOOK</span><span class="pill-badge pill-outline hover:border-brand-500/50">bprm_check_security</span></div>
                         <div class="flex justify-between items-center"><span class="text-zinc-500 font-semibold tracking-wide">IPC PROTOCOL</span><span class="text-zinc-200 font-bold">BPF RingBuf</span></div>
-                        <div class="flex justify-between items-center"><span class="text-zinc-500 font-semibold tracking-wide">TRANSIT TUNNEL</span><span class="pill-badge pill-teal shadow-[0_0_8px_rgba(20,184,166,0.2)]" onclick="openDocsDossier('mtls')">gRPC Mutual TLS</span></div>
+                        <div class="flex justify-between items-center"><span class="text-zinc-500 font-semibold tracking-wide">TRANSIT TUNNEL</span><span class="pill-badge pill-teal shadow-[0_0_8px_rgba(20,184,166,0.2)]">gRPC Mutual TLS</span></div>
                         <div class="pt-4 border-t border-[#1f1f22] mt-auto">
                             <span class="text-emerald-400 flex items-center gap-2 font-bold"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> X.509 v3 SAN Verified</span>
                         </div>
@@ -198,9 +182,9 @@
 
     <div id="slide-backdrop" class="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm" onclick="closeSlideOver()"></div>
     <div id="slide-panel" class="fixed inset-y-0 right-0 w-full sm:w-[500px] md:w-[700px] bg-[#0a0a0c] border-l border-dark-border shadow-[0_0_50px_rgba(0,0,0,0.8)] z-[70] flex flex-col">
-        <div class="px-6 sm:px-10 py-6 border-b border-[#1f1f22] bg-black/50 flex justify-between items-start shrink-0 relative">
-            <div class="pr-10">
-                <h2 class="text-xl sm:text-2xl font-bold text-white font-mono tracking-tight flex items-center gap-3" id="slide-title">Title</h2>
+        <div class="px-6 sm:px-10 py-6 border-b border-[#1f1f22] bg-black/50 flex justify-between items-start shrink-0 relative backdrop-blur-md">
+            <div class="pr-12 w-full">
+                <h2 class="text-xl sm:text-2xl font-bold text-white font-mono tracking-tight flex items-center gap-3 break-words" id="slide-title">Title</h2>
                 <p class="text-xs mt-2 font-mono uppercase tracking-widest" id="slide-subtitle">Subtitle</p>
             </div>
             <button onclick="closeSlideOver()" class="absolute top-6 right-6 text-zinc-500 hover:text-white bg-zinc-800/50 hover:bg-zinc-700/50 p-2 rounded-md transition-colors"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
@@ -211,208 +195,162 @@
     <script>
         const slideBackdrop = document.getElementById('slide-backdrop');
         const slidePanel = document.getElementById('slide-panel');
+        let globalCommits = [];
+        let isTermPaused = false;
+        let isFilterActive = true; 
+
+        function escapeHtml(unsafe) {
+            return (unsafe || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
 
         function openSlideOver(title, subtitle, html, themeColor = 'text-brand-400') {
             document.getElementById('slide-title').innerHTML = title;
-            const sub = document.getElementById('slide-subtitle');
-            sub.className = `text-[10px] sm:text-xs mt-1 font-mono uppercase tracking-widest ${themeColor}`;
-            sub.innerText = subtitle;
+            document.getElementById('slide-subtitle').className = `text-[10px] sm:text-xs mt-1 font-mono uppercase tracking-widest ${themeColor}`;
+            document.getElementById('slide-subtitle').innerText = subtitle;
             document.getElementById('slide-content').innerHTML = html;
             
             let borderClass = 'border-dark-border';
-            if(themeColor.includes('brand') || themeColor.includes('#14b8a6')) borderClass = 'border-brand-500/50';
+            if(themeColor.includes('brand') || themeColor.includes('#14b8a6') || themeColor.includes('emerald') || themeColor.includes('#10b981')) borderClass = 'border-brand-500/50';
             else if(themeColor.includes('rose') || themeColor.includes('#f43f5e')) borderClass = 'border-rose-500/50';
             else if(themeColor.includes('blue') || themeColor.includes('#3b82f6')) borderClass = 'border-blue-500/50';
             else if(themeColor.includes('indigo') || themeColor.includes('#6366f1')) borderClass = 'border-indigo-500/50';
             
             slidePanel.className = `fixed inset-y-0 right-0 w-full sm:w-[450px] md:w-[700px] bg-[#0a0a0c] border-l shadow-[0_0_50px_rgba(0,0,0,0.8)] z-[70] flex flex-col slide-panel ${borderClass}`;
             
-            slideBackdrop.classList.add('active'); slidePanel.classList.add('active'); document.body.style.overflow = 'hidden'; 
+            slideBackdrop.classList.add('active'); 
+            slidePanel.classList.add('active'); 
+            document.body.style.overflow = 'hidden'; 
         }
 
         function closeSlideOver() { slideBackdrop.classList.remove('active'); slidePanel.classList.remove('active'); document.body.style.overflow = ''; }
         document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSlideOver(); });
 
-        // Stream Controls
-        let isTermPaused = false;
-        function terminalClear() { document.getElementById('terminal-logs').innerHTML = '<div class="mb-1 text-zinc-500 font-bold">[ ∅ VANTIO ] BUFFER CLEARED. AWAITING UPLINK...</div>'; }
+        // TERMINAL CONTROLS
+        function terminalClear() { document.getElementById('terminal-logs').innerHTML = '<div class="mb-1 text-zinc-500 font-bold border-l-2 border-zinc-500 pl-2 mx-1 font-mono">[ ∅ VANTIO ] BUFFER CLEARED. AWAITING UPLINK...</div>'; }
         function terminalPause() {
             isTermPaused = !isTermPaused;
             document.getElementById('btn-pause').classList.toggle('text-rose-500', isTermPaused);
-            document.getElementById('term-status').innerText = isTermPaused ? 'STREAM PAUSED' : 'SSE TUNNEL LOCK';
+            document.getElementById('term-status').innerText = isTermPaused ? 'STREAM PAUSED' : 'TUNNEL LOCK';
             if(isTermPaused) {
-                document.getElementById('term-pulse').classList.remove('animate-pulse');
-                document.getElementById('term-pulse').classList.replace('bg-[#14b8a6]', 'bg-rose-500');
+                document.getElementById('term-pulse').classList.remove('animate-pulse', 'bg-brand-500');
+                document.getElementById('term-pulse').classList.add('bg-rose-500');
             } else {
-                document.getElementById('term-pulse').classList.add('animate-pulse');
-                document.getElementById('term-pulse').classList.replace('bg-rose-500', 'bg-[#14b8a6]');
+                document.getElementById('term-pulse').classList.add('animate-pulse', 'bg-brand-500');
+                document.getElementById('term-pulse').classList.remove('bg-rose-500');
             }
         }
-
-        // ------------------ GTM DOSSIER CONTENT ------------------
-        const contentKernel = `<div class="space-y-8 font-sans">
-            <div>
-                <h3 class="text-white font-bold text-[17px] mb-3">The Legacy Userspace Bottleneck</h3>
-                <p class="text-zinc-400 text-[15px] leading-7">Traditional cybersecurity agents (CrowdStrike, Datadog) operate in <strong>Ring-3 Userspace</strong>. When a process executes a system call (like reading a file or opening a network port), the CPU must physically halt execution, switch context into the kernel, verify the action, switch context back to userspace, ask the security agent if the action is malicious, switch back to the kernel, and finally grant permission.</p>
-                <p class="text-zinc-400 text-[15px] leading-7 mt-4">This context-switch ping-pong adds <strong>10,000+ microseconds of latency per system call.</strong> On a high-throughput enterprise database, this overhead causes catastrophic transaction degradation.</p>
-            </div>
-            <div class="bg-[#14b8a6]/10 border border-[#14b8a6]/30 p-6 sm:p-8 rounded-xl shadow-[0_0_15px_rgba(20,184,166,0.1)]">
-                <h3 class="text-[#14b8a6] font-bold mb-6 font-mono flex items-center gap-2"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> The Vantio Advantage: Ring-0 Execution</h3>
-                <div class="text-zinc-300 text-[14px] font-mono space-y-6">
-                    <div><strong class="text-white block mb-1 text-[15px]"><span class="text-emerald-400 mr-2">✓</span>Zero Context Switching:</strong><span class="text-zinc-400 block pl-6">Threats are evaluated exactly where they are generated.</span></div>
-                    <div><strong class="text-white block mb-1 text-[15px]"><span class="text-emerald-400 mr-2">✓</span>Sub-Microsecond Latency:</strong><span class="text-zinc-400 block pl-6">Vantio executes the hook in < 2.5µs.</span></div>
-                    <div><strong class="text-white block mb-1 text-[15px]"><span class="text-emerald-400 mr-2">✓</span>Zero-Allocation Memory:</strong><span class="text-zinc-400 block pl-6">Telemetry is passed asynchronously to userspace via a lockless BPF RingBuf, meaning zero memory leaks.</span></div>
-                </div>
-            </div>
-        </div>`;
-
-        const contentMtls = `<div class="space-y-8 font-sans">
-            <div>
-                <h3 class="text-white font-bold text-[17px] mb-3">The JSON/REST Vulnerability</h3>
-                <p class="text-zinc-400 text-[15px] leading-7">Legacy architecture relies on Edge Nodes sending telemetry to the Control Plane via JSON payloads over standard HTTP POST requests. This leaves the system inherently vulnerable to schema drift, Man-In-The-Middle (MITM) attacks, and Edge Node spoofing.</p>
-            </div>
-            <div class="bg-blue-500/10 border border-blue-500/30 p-6 sm:p-8 rounded-xl shadow-[0_0_15px_rgba(59,130,246,0.1)]">
-                <h3 class="text-blue-400 font-bold mb-6 font-mono flex items-center gap-2"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg> The Vantio Advantage: mTLS + Protobuf</h3>
-                <div class="text-zinc-300 text-[14px] font-mono space-y-6">
-                    <div><strong class="text-white block mb-1 text-[15px]"><span class="text-emerald-400 mr-2">✓</span>Bidirectional Cryptography:</strong><span class="text-zinc-400 block pl-6">The Control Plane mathematically refuses connections from any node without a 4096-bit X.509 Client Certificate.</span></div>
-                    <div><strong class="text-white block mb-1 text-[15px]"><span class="text-emerald-400 mr-2">✓</span>SAN Enforcement:</strong><span class="text-zinc-400 block pl-6">Certificates enforce strict Subject Alternative Name (SAN) IP bindings, rendering DNS-spoofing impossible.</span></div>
-                    <div><strong class="text-white block mb-1 text-[15px]"><span class="text-emerald-400 mr-2">✓</span>Pure-Rust Cryptography:</strong><span class="text-zinc-400 block pl-6">Vantio utilizes <code>rustls</code>—a memory-safe, pure-Rust cryptographic engine that executes entirely within the Distroless container vacuum.</span></div>
-                </div>
-            </div>
-        </div>`;
-        
-        function openDocsDossier(type) {
-            if(type === 'kernel') openSlideOver('<div class="w-3.5 h-3.5 bg-[#14b8a6] rounded-full animate-pulse shadow-[0_0_10px_rgba(20,184,166,0.5)] shrink-0"></div> <span class="break-words">Kernel Physics (eBPF)</span>', 'THE MATHEMATICS OF ZERO-LATENCY INTERCEPTION', contentKernel, 'text-[#14b8a6]');
-            else if(type === 'mtls') openSlideOver('<div class="w-3.5 h-3.5 bg-blue-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(59,130,246,0.5)] shrink-0"></div> <span class="break-words">Mutual TLS Uplink</span>', 'MATHEMATICALLY IMPENETRABLE TRANSIT', contentMtls, 'text-blue-400');
+        function terminalFilter() {
+            isFilterActive = !isFilterActive;
+            document.getElementById('btn-filter').classList.toggle('text-brand-400', isFilterActive);
+            document.getElementById('btn-filter').classList.toggle('text-zinc-500', !isFilterActive);
+            document.getElementById('terminal-logs').innerHTML += '<div class="mb-1 font-mono text-zinc-500 text-[10px] sm:text-xs mx-1 border-l-2 border-brand-500 pl-2">> Background Traces ' + (isFilterActive ? 'VISIBLE' : 'HIDDEN') + '</div>';
+            const term = document.getElementById('terminal-logs'); term.scrollTop = term.scrollHeight;
         }
-        // ---------------------------------------------------------
 
+        // NEW DOSSIERS (UPTIME & TOPOGRAPHY)
+        function openSystemDossier(type) {
+            let title, subtitle, color, html;
+            if(type === 'apex') {
+                title = '<svg class="w-6 h-6 text-[#14b8a6] inline-block mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Enterprise Apex License'; subtitle = 'PROPRIETARY ORCHESTRATION MATRIX'; color = 'text-[#14b8a6]';
+                html = '<div class="space-y-6 font-mono"><div class="bg-[#14b8a6]/10 border border-[#14b8a6]/30 p-5 rounded-lg shadow-[0_0_15px_rgba(20,184,166,0.1)]"><h3 class="text-[#14b8a6] font-bold mb-2">LICENSE STATUS: VALIDATED</h3><p class="text-zinc-300 text-sm leading-relaxed">This terminal is cryptographically authenticated via Vantio Cloud IAM. Full Apex capabilities are unlocked.</p></div><div class="grid grid-cols-1 sm:grid-cols-2 gap-4"><div class="bg-dark-bg p-5 rounded-lg border border-dark-border"><p class="text-white font-bold mb-2 text-[14px]">WORM Storage Replication</p><p class="text-zinc-400 text-xs leading-relaxed">All neutralized threats are hashed via zk-STARK and pushed to immutable storage.</p></div><div class="bg-dark-bg p-5 rounded-lg border border-dark-border"><p class="text-white font-bold mb-2 text-[14px]">Unlimited BPF Bandwidth</p><p class="text-zinc-400 text-xs leading-relaxed">Kernel IPC array bounds unlocked to 1024 MB per node for maximum load balancing.</p></div></div><div class="bg-dark-bg p-5 rounded-lg border border-dark-border"><p class="text-white font-bold mb-2 text-[14px]">Priority Layer-4 Anycast Routing</p><p class="text-zinc-400 text-sm leading-relaxed">Dedicated mTLS routing via Google Edge POPs ensuring minimum latency transit globally.</p></div></div>';
+            } else if(type === 'uptime') {
+                title = '<svg class="w-6 h-6 text-[#10b981] inline-block mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> High Availability Matrix'; subtitle = '99.999% SLA ARCHITECTURE'; color = 'text-[#10b981]';
+                html = '<div class="space-y-6 font-mono"><div class="bg-[#10b981]/10 border border-[#10b981]/30 p-6 rounded-lg shadow-[0_0_15px_rgba(16,185,129,0.1)]"><h3 class="text-[#10b981] font-bold mb-2">SYSTEM HEALTH: NOMINAL</h3><p class="text-zinc-300 text-sm leading-relaxed">The Vantio Control Plane leverages a masterless, self-healing architecture deployed across multi-zone Kubernetes clusters.</p></div><div class="grid grid-cols-2 gap-4"><div class="bg-dark-bg p-5 rounded-lg border border-dark-border"><p class="text-[10px] text-zinc-500 mb-1">REPLICAS</p><p class="text-[#10b981] text-xl font-bold">12 ACTIVE</p></div><div class="bg-dark-bg p-5 rounded-lg border border-dark-border"><p class="text-[10px] text-zinc-500 mb-1">POD LIFECYCLE</p><p class="text-[#10b981] text-xl font-bold">DISTROLESS</p></div></div><div class="bg-dark-bg p-6 rounded-lg border border-dark-border mt-4"><p class="text-white font-bold text-sm mb-3 border-b border-dark-border pb-3">Multi-Zone Routing (us-central1)</p><div class="space-y-4 mt-4"><div class="flex justify-between items-center"><span class="text-zinc-300 text-sm">Zone A (Iowa)</span><span class="text-[#10b981] font-bold text-[10px] bg-[#10b981]/10 px-2 py-1 rounded border border-[#10b981]/30">PRIMARY</span></div><div class="flex justify-between items-center"><span class="text-zinc-300 text-sm">Zone B (Iowa)</span><span class="text-[#10b981] font-bold text-[10px] bg-[#10b981]/10 px-2 py-1 rounded border border-[#10b981]/30">ACTIVE</span></div><div class="flex justify-between items-center"><span class="text-zinc-300 text-sm">Zone F (Iowa)</span><span class="text-[#10b981] font-bold text-[10px] bg-[#10b981]/10 px-2 py-1 rounded border border-[#10b981]/30">ACTIVE</span></div></div></div></div>';
+            } else if(type === 'radar') {
+                title = '<svg class="w-6 h-6 text-[#14b8a6] inline-block mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> Syscall Velocity Radar'; subtitle = 'HARDWARE-ACCELERATED TELEMETRY'; color = 'text-[#14b8a6]';
+                html = '<div class="space-y-6 font-mono"><div class="bg-[#14b8a6]/10 border border-[#14b8a6]/30 p-6 rounded-lg shadow-[0_0_15px_rgba(20,184,166,0.1)]"><h3 class="text-[#14b8a6] font-bold mb-2">30 FPS DUAL INTERPOLATION ACTIVE</h3><p class="text-zinc-300 text-sm leading-relaxed">This radar uses a custom 33ms Javascript game-loop to mathematically calculate distance between stacked syscall throughput states, rendering exact topography via HTML5 Canvas.</p></div><div class="space-y-4"><div class="bg-dark-bg p-5 rounded-lg border border-dark-border"><p class="text-white font-bold mb-2 text-[15px]">Dual Dataset Engine</p><p class="text-zinc-400 text-sm leading-relaxed">The radar tracks <code>sys_enter_execve</code> (Teal) and <code>sys_enter_openat</code> (Blue) simultaneously as a stacked HTML5 Canvas area chart.</p></div><div class="bg-dark-bg p-5 rounded-lg border border-dark-border"><p class="text-white font-bold mb-2 text-[15px]">Linear Decay Spikes</p><p class="text-zinc-400 text-sm leading-relaxed">When a threat is neutralized, the graph snaps to 19.5k Hz to simulate eBPF load, holding for 600ms before decaying algorithmically.</p></div></div></div>';
+            } else if(type === 'topography') {
+                title = '<svg class="w-6 h-6 text-[#14b8a6] inline-block mr-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg> Matrix Topography'; subtitle = 'LIVE INFRASTRUCTURE MAP'; color = 'text-[#14b8a6]';
+                html = '<div class="space-y-6 font-mono"><div class="bg-[#14b8a6]/10 border border-[#14b8a6]/30 p-5 rounded-lg shadow-[0_0_15px_rgba(20,184,166,0.1)]"><h3 class="text-[#14b8a6] font-bold mb-2">ARCHITECTURE SECURED</h3><p class="text-zinc-300 text-sm leading-relaxed">The 3-Pillar Enterprise Matrix is fully locked. All eBPF programs, mTLS connections, and Axum streams are actively deployed in production across Google Cloud.</p></div><div class="space-y-4 text-xs sm:text-sm"><div class="bg-dark-bg p-5 rounded border border-dark-border"><p class="text-[10px] text-zinc-500 mb-2 uppercase font-bold tracking-widest">LAYER 1: HOST OS</p><p class="text-white font-bold text-sm">Distroless Void (Debian 12)</p><p class="text-zinc-400 mt-2 leading-relaxed">Zero shell utilities installed (no bash, wget, curl). Mathematically impossible to execute remote code via typical container breakouts.</p></div><div class="bg-dark-bg p-5 rounded border border-dark-border"><p class="text-[10px] text-zinc-500 mb-2 uppercase font-bold tracking-widest">LAYER 2: LSM HOOK</p><p class="text-[#14b8a6] font-bold text-sm">bprm_check_security</p><p class="text-zinc-400 mt-2 leading-relaxed">Pure-Rust eBPF bytecode intercepting every Linux execve() system call at Ring-0 before CPU execution context is handed to userspace.</p></div><div class="bg-dark-bg p-5 rounded border border-dark-border"><p class="text-[10px] text-zinc-500 mb-2 uppercase font-bold tracking-widest">LAYER 3: IPC PROTOCOL</p><p class="text-white font-bold text-sm">BPF RingBuf</p><p class="text-zinc-400 mt-2 leading-relaxed">Zero-allocation shared memory bus bridging the Kernel and Userspace, eliminating dynamic heap allocations and memory leaks.</p></div></div></div>';
+            }
+            openSlideOver('<div class="w-3.5 h-3.5 bg-current rounded-full animate-pulse shrink-0 inline-block mr-2"></div>' + title, subtitle, html, color);
+        }
+
+        // METRIC DOSSIERS
         function openMetricDossier(metricType) {
             let html, title, subtitle, color;
-            if(metricType === 'topography') {
-                title = '<svg class="w-6 h-6 text-brand-400 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg> Matrix Topography';
-                subtitle = 'LIVE INFRASTRUCTURE MAP'; color = 'text-brand-400';
-                html = `
-                    <div class="space-y-6 font-mono">
-                        <div class="bg-brand-500/10 border border-brand-500/30 p-5 rounded-lg shadow-[0_0_15px_rgba(20,184,166,0.1)]">
-                            <h3 class="text-brand-400 font-bold mb-2 flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></div> ARCHITECTURE SECURED</h3>
-                            <p class="text-zinc-300 text-xs sm:text-sm leading-relaxed">The 3-Pillar Enterprise Matrix is fully locked. All eBPF programs, mTLS connections, and Axum streams are actively deployed in production across Google Cloud.</p>
-                        </div>
-                        <div class="space-y-4 text-xs sm:text-sm">
-                            <div class="bg-dark-bg p-5 rounded border border-dark-border hover:border-zinc-700 transition-colors">
-                                <p class="text-[10px] text-zinc-500 mb-2 uppercase tracking-widest font-bold">LAYER 1: HOST OS</p><p class="text-white font-bold">Distroless Void (Debian 12)</p>
-                                <p class="text-zinc-400 mt-2">Zero shell utilities installed (no bash, wget, curl). Mathematically impossible to execute remote code via typical container breakouts.</p>
-                            </div>
-                            <div class="bg-dark-bg p-5 rounded border border-dark-border hover:border-zinc-700 transition-colors">
-                                <p class="text-[10px] text-zinc-500 mb-2 uppercase tracking-widest font-bold">LAYER 2: LSM HOOK</p><p class="text-white font-bold">bprm_check_security</p>
-                                <p class="text-zinc-400 mt-2">Pure-Rust eBPF bytecode intercepting every Linux execve() system call at Ring-0 before CPU execution context is handed to userspace.</p>
-                            </div>
-                            <div class="bg-dark-bg p-5 rounded border border-dark-border hover:border-zinc-700 transition-colors">
-                                <p class="text-[10px] text-zinc-500 mb-2 uppercase tracking-widest font-bold">LAYER 3: IPC PROTOCOL</p><p class="text-white font-bold">BPF RingBuf</p>
-                                <p class="text-zinc-400 mt-2">Zero-allocation shared memory bus bridging the Kernel and Userspace, eliminating dynamic heap allocations and memory leaks.</p>
-                            </div>
-                        </div>
-                    </div>`;
-            }
-            else if(metricType === 'nodes') {
-                title = '<svg class="w-6 h-6 text-brand-400 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg> Fleet Topography'; subtitle = 'GLOBAL EDGE DEPLOYMENT'; color = 'text-brand-400';
-                html = `<div class="space-y-6 font-mono"><div class="bg-brand-500/10 border border-brand-500/30 p-5 rounded-lg shadow-[0_0_15px_rgba(20,184,166,0.1)]"><h3 class="text-brand-400 font-bold mb-2 flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-brand-400 animate-pulse"></div> FLEET HEALTH: OPTIMAL</h3><p class="text-zinc-300 text-sm leading-relaxed">All 1,024 Edge Nodes are connected to the Control Plane via Mutually Authenticated (mTLS) gRPC tunnels.</p></div><div class="space-y-1"><div class="text-[10px] text-zinc-500 font-bold mb-3 border-b border-dark-border pb-2 uppercase tracking-widest">Active Regional Clusters</div><div class="flex justify-between items-center p-3 hover:bg-dark-bg/50 rounded transition-colors border border-transparent hover:border-dark-border"><div><span class="text-zinc-200 text-sm">us-central1-a</span><span class="ml-2 text-[9px] text-zinc-500 border border-zinc-700 px-1 rounded">GATEWAY</span></div><span class="text-brand-400 text-xs font-bold">mTLS SYNCED</span></div><div class="flex justify-between items-center p-3 hover:bg-dark-bg/50 rounded transition-colors border border-transparent hover:border-dark-border"><div><span class="text-zinc-200 text-sm">eu-west3-b</span><span class="ml-2 text-[9px] text-zinc-500 border border-zinc-700 px-1 rounded">RELAY</span></div><span class="text-brand-400 text-xs font-bold">mTLS SYNCED</span></div><div class="flex justify-between items-center p-3 hover:bg-dark-bg/50 rounded transition-colors border border-transparent hover:border-dark-border"><div><span class="text-zinc-200 text-sm">ap-northeast1-c</span><span class="ml-2 text-[9px] text-zinc-500 border border-zinc-700 px-1 rounded">EDGE</span></div><span class="text-brand-400 text-xs font-bold">mTLS SYNCED</span></div></div></div>`;
+            if(metricType === 'nodes') {
+                title = 'Fleet Topography'; subtitle = 'GLOBAL EDGE DEPLOYMENT'; color = 'text-[#14b8a6]';
+                html = '<div class="space-y-6 font-mono"><div class="bg-[#14b8a6]/10 border border-[#14b8a6]/30 p-5 rounded-lg shadow-[0_0_15px_rgba(20,184,166,0.1)]"><h3 class="text-[#14b8a6] font-bold mb-2">FLEET HEALTH: OPTIMAL</h3><p class="text-zinc-300 text-sm leading-relaxed">All 1,024 Edge Nodes are connected to the Control Plane via Mutually Authenticated (mTLS) gRPC tunnels.</p></div><div class="space-y-1"><div class="text-[10px] text-zinc-500 font-bold mb-3 border-b border-dark-border pb-2 uppercase tracking-widest">Active Regional Clusters</div><div class="flex justify-between items-center p-3 hover:bg-dark-bg/50 rounded transition-colors border border-transparent hover:border-dark-border"><div><span class="text-zinc-200 text-sm">us-central1-a</span><span class="ml-2 text-[9px] text-zinc-500 border border-zinc-700 px-1 rounded">GATEWAY</span></div><span class="text-[#14b8a6] text-xs font-bold">mTLS SYNCED</span></div><div class="flex justify-between items-center p-3 hover:bg-dark-bg/50 rounded transition-colors border border-transparent hover:border-dark-border"><div><span class="text-zinc-200 text-sm">eu-west3-b</span><span class="ml-2 text-[9px] text-zinc-500 border border-zinc-700 px-1 rounded">RELAY</span></div><span class="text-[#14b8a6] text-xs font-bold">mTLS SYNCED</span></div><div class="flex justify-between items-center p-3 hover:bg-dark-bg/50 rounded transition-colors border border-transparent hover:border-dark-border"><div><span class="text-zinc-200 text-sm">ap-northeast1-c</span><span class="ml-2 text-[9px] text-zinc-500 border border-zinc-700 px-1 rounded">EDGE</span></div><span class="text-[#14b8a6] text-xs font-bold">mTLS SYNCED</span></div></div></div>';
             } else if(metricType === 'syscalls') {
-                title = '<svg class="w-6 h-6 text-blue-400 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> eBPF Hook Diagnostics'; subtitle = 'KERNEL PERFORMANCE METRICS'; color = 'text-blue-400';
-                html = `<div class="space-y-6 font-mono"><div class="bg-blue-500/10 border border-blue-500/30 p-5 rounded-lg shadow-[0_0_15px_rgba(59,130,246,0.1)]"><h3 class="text-blue-400 font-bold mb-2">ZERO LATENCY DEGRADATION</h3><p class="text-zinc-300 text-sm leading-relaxed">Inline packet inspection is active. Over 84 million system calls intercepted without breaking the 3µs execution boundary.</p></div><div class="space-y-4"><div class="bg-dark-bg border border-dark-border p-4 rounded-lg"><div class="flex justify-between items-end mb-2"><span class="text-zinc-200 text-sm font-bold">sys_enter_execve</span><span class="text-emerald-400 text-xs font-bold">2.4 µs</span></div><div class="w-full bg-zinc-800 rounded-full h-1.5"><div class="bg-blue-500 h-1.5 rounded-full" style="width: 45%"></div></div><p class="text-xs text-zinc-500 mt-2">Intercepts all new process executions.</p></div><div class="bg-dark-bg border border-dark-border p-4 rounded-lg"><div class="flex justify-between items-end mb-2"><span class="text-zinc-200 text-sm font-bold">sys_enter_openat</span><span class="text-emerald-400 text-xs font-bold">1.8 µs</span></div><div class="w-full bg-zinc-800 rounded-full h-1.5"><div class="bg-blue-500 h-1.5 rounded-full" style="width: 70%"></div></div><p class="text-xs text-zinc-500 mt-2">Intercepts all file access attempts.</p></div><div class="bg-dark-bg border border-dark-border p-4 rounded-lg"><div class="flex justify-between items-end mb-2"><span class="text-zinc-200 text-sm font-bold">bpf_probe_read_user</span><span class="text-emerald-400 text-xs font-bold">0.5 µs</span></div><div class="w-full bg-zinc-800 rounded-full h-1.5"><div class="bg-blue-400 h-1.5 rounded-full" style="width: 15%"></div></div><p class="text-xs text-zinc-500 mt-2">Extracts payload arguments from userspace.</p></div></div></div>`;
+                title = 'eBPF Hook Diagnostics'; subtitle = 'KERNEL PERFORMANCE METRICS'; color = 'text-blue-400';
+                html = '<div class="space-y-6 font-mono"><div class="bg-blue-500/10 border border-blue-500/30 p-5 rounded-lg shadow-[0_0_15px_rgba(59,130,246,0.1)]"><h3 class="text-blue-400 font-bold mb-2">ZERO LATENCY DEGRADATION</h3><p class="text-zinc-300 text-sm leading-relaxed">Inline packet inspection is active. Over 84 million system calls intercepted without breaking the 3&mu;s execution boundary.</p></div><div class="space-y-4"><div class="bg-dark-bg border border-dark-border p-4 rounded-lg"><div class="flex justify-between items-end mb-2"><span class="text-zinc-200 text-sm font-bold">sys_enter_execve</span><span class="text-emerald-400 text-xs font-bold">2.4 &mu;s</span></div><div class="w-full bg-zinc-800 rounded-full h-1.5"><div class="bg-blue-500 h-1.5 rounded-full" style="width: 45%"></div></div></div><div class="bg-dark-bg border border-dark-border p-4 rounded-lg"><div class="flex justify-between items-end mb-2"><span class="text-zinc-200 text-sm font-bold">sys_enter_openat</span><span class="text-emerald-400 text-xs font-bold">1.8 &mu;s</span></div><div class="w-full bg-zinc-800 rounded-full h-1.5"><div class="bg-blue-500 h-1.5 rounded-full" style="width: 70%"></div></div></div></div></div>';
             } else if(metricType === 'threats') {
-                title = '<svg class="w-6 h-6 text-rose-500 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg> Global Threat Matrix'; subtitle = 'MITRE ATT&CK INTELLIGENCE'; color = 'text-rose-500';
-                html = `<div class="space-y-6 font-mono"><div class="bg-rose-500/10 border border-rose-500/30 p-5 rounded-lg shadow-[0_0_15px_rgba(244,63,94,0.1)]"><h3 class="text-rose-500 font-bold mb-2">WAVE FUNCTIONS COLLAPSED</h3><p class="text-zinc-300 text-sm leading-relaxed">All malicious execution paths are physically halted at Ring-0 before reaching the CPU.</p></div><div class="space-y-1"><div class="text-[10px] text-zinc-500 font-bold mb-3 border-b border-dark-border pb-2 uppercase tracking-widest">Top Neutralized Vectors (24H)</div><div class="flex justify-between items-center p-3 hover:bg-dark-bg/50 rounded transition-colors border border-transparent hover:border-dark-border"><div class="flex flex-col"><span class="text-zinc-200 text-sm font-bold">Semantic SQL Injection</span><span class="text-[10px] text-zinc-500 mt-1">T1190 - Exploit Public-Facing App</span></div><span class="text-rose-400 text-xs font-bold bg-rose-500/10 px-2 py-1 rounded border border-rose-500/20">42%</span></div><div class="flex justify-between items-center p-3 hover:bg-dark-bg/50 rounded transition-colors border border-transparent hover:border-dark-border"><div class="flex flex-col"><span class="text-zinc-200 text-sm font-bold">Unauthorized execve()</span><span class="text-[10px] text-zinc-500 mt-1">T1059 - Command and Scripting</span></div><span class="text-rose-400 text-xs font-bold bg-rose-500/10 px-2 py-1 rounded border border-rose-500/20">31%</span></div><div class="flex justify-between items-center p-3 hover:bg-dark-bg/50 rounded transition-colors border border-transparent hover:border-dark-border"><div class="flex flex-col"><span class="text-zinc-200 text-sm font-bold">LLM Prompt Escape</span><span class="text-[10px] text-zinc-500 mt-1">T1548 - Subvert Trust Controls</span></div><span class="text-rose-400 text-xs font-bold bg-rose-500/10 px-2 py-1 rounded border border-rose-500/20">18%</span></div></div></div>`;
+                title = 'Global Threat Matrix'; subtitle = 'MITRE ATT&CK INTELLIGENCE'; color = 'text-rose-500';
+                html = '<div class="space-y-6 font-mono"><div class="bg-rose-500/10 border border-rose-500/30 p-5 rounded-lg shadow-[0_0_15px_rgba(244,63,94,0.1)]"><h3 class="text-rose-500 font-bold mb-2">WAVE FUNCTIONS COLLAPSED</h3><p class="text-zinc-300 text-sm leading-relaxed">All malicious execution paths are physically halted at Ring-0 before reaching the CPU.</p></div><div class="space-y-1"><div class="text-[10px] text-zinc-500 font-bold mb-3 border-b border-dark-border pb-2 uppercase tracking-widest">Top Neutralized Vectors (24H)</div><div class="flex justify-between items-center p-3 hover:bg-dark-bg/50 rounded transition-colors border border-transparent hover:border-dark-border"><div class="flex flex-col"><span class="text-zinc-200 text-sm font-bold">Semantic SQL Injection</span><span class="text-[10px] text-zinc-500 mt-1">T1190 - Exploit Public-Facing App</span></div><span class="text-rose-400 text-xs font-bold bg-rose-500/10 px-2 py-1 rounded border border-rose-500/20">42%</span></div><div class="flex justify-between items-center p-3 hover:bg-dark-bg/50 rounded transition-colors border border-transparent hover:border-dark-border"><div class="flex flex-col"><span class="text-zinc-200 text-sm font-bold">Unauthorized execve()</span><span class="text-[10px] text-zinc-500 mt-1">T1059 - Command and Scripting</span></div><span class="text-rose-400 text-xs font-bold bg-rose-500/10 px-2 py-1 rounded border border-rose-500/20">31%</span></div></div></div>';
             } else if(metricType === 'ringbuf') {
-                title = '<svg class="w-6 h-6 text-indigo-400 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path></svg> Kernel Memory Allocation'; subtitle = 'BPF RINGBUF DIAGNOSTICS'; color = 'text-indigo-400';
-                html = `<div class="space-y-6 font-mono"><div class="bg-indigo-500/10 border border-indigo-500/30 p-5 rounded-lg shadow-[0_0_15px_rgba(99,102,241,0.1)]"><h3 class="text-indigo-400 font-bold mb-2">LOCKLESS ARRAY ACTIVE</h3><p class="text-zinc-300 text-sm leading-relaxed">Zero dynamic memory allocation post-boot. Pre-allocated memory bus shared directly with userspace.</p></div><div class="grid grid-cols-2 gap-4"><div class="bg-dark-bg p-4 rounded-lg border border-dark-border"><p class="text-[10px] text-zinc-500 mb-1">BUFFER SIZE</p><p class="text-zinc-200 text-lg font-bold">256 KB</p></div><div class="bg-dark-bg p-4 rounded-lg border border-dark-border"><p class="text-[10px] text-zinc-500 mb-1">MEMORY LEAKS</p><p class="text-emerald-400 text-lg font-bold">0 BYTES</p></div><div class="bg-dark-bg p-4 rounded-lg border border-dark-border"><p class="text-[10px] text-zinc-500 mb-1">BUFFER OVERRUNS</p><p class="text-emerald-400 text-lg font-bold">0 DROPS</p></div><div class="bg-dark-bg p-4 rounded-lg border border-dark-border"><p class="text-[10px] text-zinc-500 mb-1">PAGE FAULTS</p><p class="text-emerald-400 text-lg font-bold">0 FAULTS</p></div></div><div class="p-4 border border-dark-border rounded-lg bg-black"><p class="text-[10px] text-zinc-500 mb-3 uppercase tracking-widest">Live Array Utilization</p><div class="w-full bg-zinc-800 rounded-full h-2 mb-2"><div class="bg-indigo-400 h-2 rounded-full shadow-[0_0_10px_#818cf8]" style="width: 12%"></div></div><p class="text-xs text-zinc-400 text-right font-bold">12% CAPACITY</p></div></div>`;
+                title = 'Kernel Memory Allocation'; subtitle = 'BPF RINGBUF DIAGNOSTICS'; color = 'text-indigo-400';
+                html = '<div class="space-y-6 font-mono"><div class="bg-indigo-500/10 border border-indigo-500/30 p-5 rounded-lg shadow-[0_0_15px_rgba(99,102,241,0.1)]"><h3 class="text-indigo-400 font-bold mb-2">LOCKLESS ARRAY ACTIVE</h3><p class="text-zinc-300 text-sm leading-relaxed">Zero dynamic memory allocation post-boot. Pre-allocated memory bus shared directly with userspace.</p></div><div class="grid grid-cols-2 gap-4"><div class="bg-dark-bg p-4 rounded-lg border border-dark-border"><p class="text-[10px] text-zinc-500 mb-1">BUFFER SIZE</p><p class="text-zinc-200 text-lg font-bold">256 KB</p></div><div class="bg-dark-bg p-4 rounded-lg border border-dark-border"><p class="text-[10px] text-zinc-500 mb-1">MEMORY LEAKS</p><p class="text-emerald-400 text-lg font-bold">0 BYTES</p></div></div><div class="p-4 border border-dark-border rounded-lg bg-black"><p class="text-[10px] text-zinc-500 mb-3 uppercase tracking-widest">Live Array Utilization</p><div class="w-full bg-zinc-800 rounded-full h-2 mb-2"><div class="bg-indigo-400 h-2 rounded-full shadow-[0_0_10px_#818cf8]" style="width: 12%"></div></div><p class="text-xs text-zinc-400 text-right font-bold">12% CAPACITY</p></div></div>';
             }
-            openSlideOver(title, subtitle, html, color);
+            openSlideOver('<div class="w-3.5 h-3.5 bg-current rounded-full animate-pulse shrink-0 inline-block mr-2"></div>' + title, subtitle, html, color);
         }
 
         function toggleSlideOver(type) {
             if(type === 'policy') {
-                const html = `<div class="space-y-4"><div class="p-4 rounded-lg bg-dark-bg border border-dark-border hover:border-brand-500/50 transition-colors"><div class="flex justify-between items-start mb-2"><div><h4 class="text-sm font-bold text-white">Strict execve() Sandbox</h4><p class="text-[11px] text-zinc-400 mt-1">Block unauthorized shell execution at Ring-0.</p></div><div class="w-10 h-5 bg-brand-500 rounded-full relative shadow-[0_0_10px_rgba(20,184,166,0.3)] shrink-0"><div class="absolute right-1 top-1 bg-white w-3 h-3 rounded-full"></div></div></div></div><div class="p-4 rounded-lg bg-dark-bg border border-dark-border hover:border-brand-500/50 transition-colors"><div class="flex justify-between items-start mb-2"><div><h4 class="text-sm font-bold text-white">Semantic AI Filters</h4><p class="text-[11px] text-zinc-400 mt-1">Intercept SQLi & Prompt Injections locally.</p></div><div class="w-10 h-5 bg-brand-500 rounded-full relative shadow-[0_0_10px_rgba(20,184,166,0.3)] shrink-0"><div class="absolute right-1 top-1 bg-white w-3 h-3 rounded-full"></div></div></div></div><div class="p-4 rounded-lg bg-dark-bg border border-dark-border opacity-50 cursor-not-allowed"><div class="flex justify-between items-start mb-2"><div><h4 class="text-sm font-bold text-white">WORM Storage Replication</h4><p class="text-[9px] text-rose-400 font-bold mt-1 tracking-widest uppercase border border-rose-500/30 bg-rose-500/10 inline-block px-1.5 py-0.5 rounded">Enterprise License Required</p></div><div class="w-10 h-5 bg-zinc-800 rounded-full relative shrink-0"><div class="absolute left-1 top-1 bg-zinc-500 w-3 h-3 rounded-full"></div></div></div></div><button onclick="closeSlideOver()" class="w-full mt-6 bg-brand-500 hover:bg-brand-400 text-black px-4 py-3 rounded-md text-sm font-bold transition-all shadow-[0_0_15px_rgba(20,184,166,0.2)]">Deploy to Edge Fleet</button></div>`;
+                const html = '<div class="space-y-4"><div class="p-4 rounded-lg bg-dark-bg border border-dark-border hover:border-brand-500/50 transition-colors"><div class="flex justify-between items-start mb-2"><div><h4 class="text-sm font-bold text-white">Strict execve() Sandbox</h4><p class="text-[11px] text-zinc-400 mt-1">Block unauthorized shell execution at Ring-0.</p></div><div class="w-10 h-5 bg-brand-500 rounded-full relative shadow-[0_0_10px_rgba(20,184,166,0.3)] shrink-0"><div class="absolute right-1 top-1 bg-white w-3 h-3 rounded-full"></div></div></div></div><div class="p-4 rounded-lg bg-dark-bg border border-dark-border hover:border-brand-500/50 transition-colors"><div class="flex justify-between items-start mb-2"><div><h4 class="text-sm font-bold text-white">Semantic AI Filters</h4><p class="text-[11px] text-zinc-400 mt-1">Intercept SQLi & Prompt Injections locally.</p></div><div class="w-10 h-5 bg-brand-500 rounded-full relative shadow-[0_0_10px_rgba(20,184,166,0.3)] shrink-0"><div class="absolute right-1 top-1 bg-white w-3 h-3 rounded-full"></div></div></div></div><div class="p-4 rounded-lg bg-dark-bg border border-dark-border opacity-50 cursor-not-allowed"><div class="flex justify-between items-start mb-2"><div><h4 class="text-sm font-bold text-white">WORM Storage Replication</h4><p class="text-[9px] text-rose-400 font-bold mt-1 tracking-widest uppercase border border-rose-500/30 bg-rose-500/10 inline-block px-1.5 py-0.5 rounded">Enterprise License Required</p></div><div class="w-10 h-5 bg-zinc-800 rounded-full relative shrink-0"><div class="absolute left-1 top-1 bg-zinc-500 w-3 h-3 rounded-full"></div></div></div></div><button onclick="closeSlideOver()" class="w-full mt-6 bg-brand-500 hover:bg-brand-400 text-black px-4 py-3 rounded-md text-sm font-bold transition-all shadow-[0_0_15px_rgba(20,184,166,0.2)]">Deploy to Edge Fleet</button></div>';
                 openSlideOver('<svg class="w-5 h-5 text-brand-500 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg> zk-STARK Policies', 'GLOBAL ORCHESTRATION', html, 'text-brand-400');
             }
         }
 
-        function showThreatDossier(edge_id, pid, latency, severity, threat, time) {
-            const sanitizedThreat = threat.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-            const html = `
-                <div class="font-mono space-y-6">
-                    <div class="bg-rose-500/10 border border-rose-500/30 p-5 rounded-lg shadow-[0_0_15px_rgba(244,63,94,0.1)]">
-                        <p class="text-[10px] font-bold text-rose-500 mb-2 tracking-widest flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span> SEVERITY: ${severity}</p>
-                        <p class="text-zinc-200 text-sm break-all font-bold">PAYLOAD HEX-DUMP DECODED:</p>
-                        <div class="bg-black p-3 rounded mt-2 border border-rose-500/20 text-rose-400 text-xs overflow-x-auto whitespace-pre"><code>${sanitizedThreat}</code></div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3 sm:gap-4">
-                        <div class="bg-dark-bg p-3 sm:p-4 rounded-lg border border-dark-border"><p class="text-[9px] text-zinc-500 mb-1">EDGE NODE ID</p><p class="text-brand-400 text-[10px] sm:text-xs font-bold truncate">${edge_id}</p></div>
-                        <div class="bg-dark-bg p-3 sm:p-4 rounded-lg border border-dark-border"><p class="text-[9px] text-zinc-500 mb-1">TARGET PID</p><p class="text-zinc-300 text-xs font-bold">${pid}</p></div>
-                        <div class="bg-dark-bg p-3 sm:p-4 rounded-lg border border-dark-border"><p class="text-[9px] text-zinc-500 mb-1">UTC TIMESTAMP</p><p class="text-zinc-300 text-[10px] sm:text-xs">${time}</p></div>
-                        <div class="bg-dark-bg p-3 sm:p-4 rounded-lg border border-dark-border"><p class="text-[9px] text-zinc-500 mb-1">MITRE ATT&CK</p><p class="text-rose-400 text-xs font-bold">T1190</p></div>
-                    </div>
-                    <div class="bg-emerald-500/10 border border-emerald-500/20 p-4 rounded-lg">
-                        <div class="flex items-center gap-2 mb-2"><svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><span class="text-emerald-400 font-bold text-sm">Threat Neutralized in ${latency}µs</span></div>
-                        <p class="text-zinc-400 text-[11px] leading-relaxed">The eBPF hypervisor executed a Wave Function Collapse at the LSM hook. The semantic hallucination was dropped at Ring-0 before reaching the CPU userspace execution path.</p>
-                    </div>
-                </div>`;
-            openSlideOver('<svg class="w-5 h-5 text-rose-500 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg> Intelligence Dossier', 'NEURAL UPLINK FORENSICS', html, 'text-rose-500');
+        function showTraceDossier(msg, time) {
+            const html = '<div class="space-y-6 font-mono"><div class="bg-zinc-800/30 border border-zinc-700/50 p-5 rounded-lg shadow-[0_0_15px_rgba(255,255,255,0.05)]"><h3 class="text-zinc-300 font-bold mb-2">BACKGROUND FORENSICS</h3><p class="text-zinc-400 text-sm leading-relaxed">Detailed breakdown of background trace event captured over the secure eBPF-to-gRPC pipeline.</p></div><div class="bg-black p-4 rounded-lg border border-dark-border"><p class="text-[10px] text-zinc-500 mb-2">PAYLOAD CONTENT</p><p class="text-brand-400 text-xs break-all">' + msg + '</p></div><div class="grid grid-cols-2 gap-4"><div class="bg-dark-bg p-4 rounded-lg border border-dark-border"><p class="text-[10px] text-zinc-500 mb-1">UTC TIMESTAMP</p><p class="text-zinc-300 text-xs">' + time + '</p></div><div class="bg-dark-bg p-4 rounded-lg border border-dark-border"><p class="text-[10px] text-zinc-500 mb-1">LATENCY OVERHEAD</p><p class="text-emerald-400 text-xs font-bold">&lt; 0.5 &mu;s</p></div></div></div>';
+            openSlideOver('<svg class="w-6 h-6 text-zinc-400 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> Trace Forensics', 'KERNEL PIPELINE EVENT', html, 'text-zinc-400');
         }
 
-        let globalCommits = [];
+        function showThreatDossier(edge_id, pid, latency, severity, threat, time) {
+            const html = '<div class="font-mono space-y-6"><div class="bg-rose-500/10 border border-rose-500/30 p-5 rounded-lg shadow-[0_0_15px_rgba(244,63,94,0.1)]"><p class="text-[10px] font-bold text-rose-500 mb-2 tracking-widest flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span> SEVERITY: ' + severity + '</p><p class="text-zinc-200 text-sm break-all font-bold">PAYLOAD HEX-DUMP DECODED:</p><div class="bg-black p-3 rounded mt-2 border border-rose-500/20 text-rose-400 text-xs overflow-x-auto whitespace-pre"><code>' + threat + '</code></div></div><div class="grid grid-cols-2 gap-3 sm:gap-4"><div class="bg-dark-bg p-3 sm:p-4 rounded-lg border border-dark-border"><p class="text-[9px] text-zinc-500 mb-1">EDGE NODE ID</p><p class="text-brand-400 text-[10px] sm:text-xs font-bold truncate">' + edge_id + '</p></div><div class="bg-dark-bg p-3 sm:p-4 rounded-lg border border-dark-border"><p class="text-[9px] text-zinc-500 mb-1">TARGET PID</p><p class="text-zinc-300 text-xs font-bold">' + pid + '</p></div><div class="bg-dark-bg p-3 sm:p-4 rounded-lg border border-dark-border"><p class="text-[9px] text-zinc-500 mb-1">UTC TIMESTAMP</p><p class="text-zinc-300 text-[10px] sm:text-xs">' + time + '</p></div><div class="bg-dark-bg p-3 sm:p-4 rounded-lg border border-dark-border"><p class="text-[9px] text-zinc-500 mb-1">MITRE ATT&CK</p><p class="text-rose-400 text-xs font-bold">T1190</p></div></div><div class="bg-emerald-500/10 border border-emerald-500/20 p-4 rounded-lg"><div class="flex items-center gap-2 mb-2"><svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><span class="text-emerald-400 font-bold text-sm">Threat Neutralized in ' + latency + '&mu;s</span></div><p class="text-zinc-400 text-[11px] leading-relaxed">The eBPF hypervisor executed a Wave Function Collapse at the LSM hook. The semantic hallucination was dropped at Ring-0 before reaching the CPU userspace execution path.</p></div></div>';
+            openSlideOver('<div class="w-3.5 h-3.5 bg-rose-500 rounded-full animate-pulse shrink-0 inline-block mr-2"></div> <span class="break-words">Intelligence Dossier</span>', 'NEURAL UPLINK FORENSICS', html, 'text-rose-500');
+        }
+
         function showLedgerCommit(index) {
             const c = globalCommits[index]; if(!c) return;
-            const safeMsg = document.createTextNode(c.msg).textContent;
-            const html = `
-                <div class="font-mono space-y-6">
-                    <div class="bg-brand-500/10 border border-brand-500/30 p-4 sm:p-5 rounded-lg shadow-[0_0_15px_rgba(20,184,166,0.05)]">
-                        <p class="text-zinc-200 text-xs sm:text-sm font-bold mb-3">${safeMsg}</p>
-                        <div class="flex items-center gap-2 text-[10px] sm:text-[11px] text-brand-400 bg-black/50 p-2 rounded w-fit border border-brand-500/20"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Verified Signature Applied</div>
-                    </div>
-                    <div class="space-y-4 text-xs sm:text-sm">
-                        <div class="flex justify-between border-b border-dark-border pb-2"><span class="text-zinc-500">Author</span><span class="text-zinc-300 font-bold">${c.author}</span></div>
-                        <div class="flex justify-between border-b border-dark-border pb-2"><span class="text-zinc-500">Timestamp</span><span class="text-zinc-300">${c.date}</span></div>
-                        <div class="flex flex-col gap-1 border-b border-dark-border pb-2"><span class="text-zinc-500">Commit Hash (SHA-1)</span><span class="text-brand-400 font-bold text-[10px] sm:text-xs break-all">${c.hash_full}</span></div>
-                        <div class="flex justify-between border-b border-dark-border pb-2"><span class="text-zinc-500">Compliance</span><span class="text-emerald-400 font-bold flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> WORM Written</span></div>
-                    </div>
-                    <a href="https://github.com/zacharybalicki/vantio-hypervisor/commit/${c.hash_full}" target="_blank" class="mt-6 flex justify-center items-center gap-2 w-full bg-white hover:bg-zinc-200 text-black px-4 py-3 rounded-md text-sm font-bold transition-colors shadow-[0_0_15px_rgba(255,255,255,0.1)]">View Diff on GitHub ↗</a>
-                </div>`;
-            openSlideOver('<svg class="w-5 h-5 text-brand-500 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg> Ledger Update', 'CRYPTOGRAPHIC COMMIT', html, 'text-brand-400');
+            const safeMsg = escapeHtml(c.msg);
+            const html = '<div class="font-mono space-y-6"><div class="bg-brand-500/10 border border-brand-500/30 p-4 sm:p-5 rounded-lg shadow-[0_0_15px_rgba(20,184,166,0.05)]"><p class="text-zinc-200 text-xs sm:text-sm font-bold mb-3">' + safeMsg + '</p><div class="flex items-center gap-2 text-[10px] sm:text-[11px] text-brand-400 bg-black/50 p-2 rounded w-fit border border-brand-500/20"><svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg> Verified Signature Applied</div></div><div class="space-y-4 text-xs sm:text-sm"><div class="flex justify-between border-b border-dark-border pb-2"><span class="text-zinc-500">Author</span><span class="text-zinc-300 font-bold">' + c.author + '</span></div><div class="flex justify-between border-b border-dark-border pb-2"><span class="text-zinc-500">Timestamp</span><span class="text-zinc-300">' + c.date + '</span></div><div class="flex flex-col gap-1 border-b border-dark-border pb-2"><span class="text-zinc-500">Commit Hash (SHA-1)</span><span class="text-brand-400 font-bold text-[10px] sm:text-xs break-all">' + c.hash_full + '</span></div><div class="flex justify-between border-b border-dark-border pb-2"><span class="text-zinc-500">Compliance</span><span class="text-emerald-400 font-bold flex items-center gap-1"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg> WORM Written</span></div></div><a href="https://github.com/zacharybalicki/vantio-hypervisor/commit/' + c.hash_full + '" target="_blank" class="mt-6 flex justify-center items-center gap-2 w-full bg-white hover:bg-zinc-200 text-black px-4 py-3 rounded-md text-sm font-bold transition-colors shadow-[0_0_15px_rgba(255,255,255,0.1)]">View Diff on GitHub ↗</a></div>';
+            openSlideOver('<div class="w-3.5 h-3.5 bg-brand-500 rounded-full animate-pulse shrink-0 inline-block mr-2"></div> <span class="break-words">Ledger Update</span>', 'CRYPTOGRAPHIC COMMIT', html, 'text-brand-400');
         }
 
-        // --- CHART.JS PHYSICS ---
+        // CHART.JS DUAL-DATASET PHYSICS
         const ctx = document.getElementById('velocityChart').getContext('2d');
-        const gradient = ctx.createLinearGradient(0, 0, 0, 220); gradient.addColorStop(0, 'rgba(20, 184, 166, 0.4)'); gradient.addColorStop(1, 'rgba(20, 184, 166, 0.0)');
-        let radarData = Array(120).fill(6000);
+        const gradTeal = ctx.createLinearGradient(0, 0, 0, 220); gradTeal.addColorStop(0, 'rgba(20, 184, 166, 0.4)'); gradTeal.addColorStop(1, 'rgba(20, 184, 166, 0.0)');
+        const gradBlue = ctx.createLinearGradient(0, 0, 0, 220); gradBlue.addColorStop(0, 'rgba(59, 130, 246, 0.4)'); gradBlue.addColorStop(1, 'rgba(59, 130, 246, 0.0)');
+        
+        let radarDataExecve = Array(60).fill(4000); let radarDataOpenat = Array(60).fill(2000);
+        
         const velocityChart = new Chart(ctx, {
             type: 'line',
-            data: { labels: Array(120).fill(''), datasets: [{ data: radarData, borderColor: '#14b8a6', backgroundColor: gradient, borderWidth: 1.5, fill: true, tension: 0.4, pointRadius: 0, pointHoverRadius: 0 }] },
-            options: { responsive: true, maintainAspectRatio: false, scales: { y: { display: true, min: 0, max: 20000, grid: { color: 'rgba(255,255,255,0.05)' }, border: { dash: [4, 4], color: 'transparent' }, ticks: { color: '#71717a', font: {family: 'monospace', size: 10} } }, x: { display: false } }, plugins: { legend: { display: false }, tooltip: { enabled: false } }, animation: false, interaction: { mode: 'index', intersect: false } }
+            data: { labels: Array(60).fill(''), datasets: [ { data: radarDataExecve, borderColor: '#14b8a6', backgroundColor: gradTeal, borderWidth: 1.5, fill: true, tension: 0.4, pointRadius: 0 }, { data: radarDataOpenat, borderColor: '#3b82f6', backgroundColor: gradBlue, borderWidth: 1.5, fill: true, tension: 0.4, pointRadius: 0 } ] },
+            options: { responsive: true, maintainAspectRatio: false, scales: { y: { stacked: true, display: true, min: 0, max: 20000, grid: { color: 'rgba(255,255,255,0.05)' }, border: { dash: [4, 4], color: 'transparent' }, ticks: { color: '#71717a', font: {family: 'monospace', size: 10} } }, x: { display: false } }, plugins: { legend: { display: false }, tooltip: { enabled: false } }, animation: false, interaction: { mode: 'index', intersect: false } }
         });
 
-        let currentVelocity = 6000; let targetVelocity = 6000; let isSpiking = false; let trueSyscalls = 0; let displaySyscalls = 0; let peakHz = 6500;
+        let targetExecve = 4000; let targetOpenat = 2000; let curExecve = 4000; let curOpenat = 2000;
+        let isSpiking = false; let trueSyscalls = 0; let displaySyscalls = 0; let peakHz = 6500;
         let backendBootTime = Date.now() - (1000 * 60 * 60 * 24);
 
         setInterval(() => {
-            currentVelocity += (targetVelocity - currentVelocity) * (isSpiking ? 0.3 : 0.08);
-            let finalVal = currentVelocity + ((Math.random() - 0.5) * 200);
-            if(finalVal > peakHz) { peakHz = Math.floor(finalVal); const el = document.getElementById('radar-peak'); if(el) el.innerText = (peakHz/1000).toFixed(1) + "K"; }
+            const ease = isSpiking ? 0.3 : 0.08;
+            curExecve += (targetExecve - curExecve) * ease;
+            curOpenat += (targetOpenat - curOpenat) * ease;
             
-            radarData.push(finalVal); radarData.shift(); velocityChart.update();
+            let valExecve = curExecve + ((Math.random() - 0.5) * 200);
+            let valOpenat = curOpenat + ((Math.random() - 0.5) * 100);
             
-            const avg = radarData.reduce((a,b)=>a+b, 0) / radarData.length;
+            radarDataExecve.push(valExecve); radarDataExecve.shift();
+            radarDataOpenat.push(valOpenat); radarDataOpenat.shift();
+            velocityChart.update();
+            
+            let total = valExecve + valOpenat;
+            if(total > peakHz) { peakHz = Math.floor(total); const el = document.getElementById('radar-peak'); if(el) el.innerText = (peakHz/1000).toFixed(1) + "K"; }
+            const avg = (radarDataExecve.reduce((a,b)=>a+b, 0) + radarDataOpenat.reduce((a,b)=>a+b, 0)) / radarDataExecve.length;
             const elAvg = document.getElementById('radar-avg'); if(elAvg) elAvg.innerText = (avg/1000).toFixed(1) + "K";
             
             if (trueSyscalls > 0) { displaySyscalls += (trueSyscalls - displaySyscalls) * 0.1; document.getElementById('metric-syscalls').innerText = (displaySyscalls / 1000000).toFixed(2) + "M"; }
-            
             const activeSeconds = Math.max(0, (Date.now() - backendBootTime) / 1000);
             const fractionalUptime = Math.min(100, 99.9980 + (activeSeconds * 0.000001));
             document.querySelectorAll('.uptime-ticker').forEach(el => el.innerText = fractionalUptime.toFixed(5) + '%');
         }, 33);
 
         setInterval(() => {
-            if(!isSpiking) targetVelocity = Math.floor(Math.random() * 4000) + 4000; 
+            if(!isSpiking) { targetExecve = Math.floor(Math.random() * 2000) + 3000; targetOpenat = Math.floor(Math.random() * 1500) + 1500; }
             if(trueSyscalls > 0) trueSyscalls += Math.floor(Math.random() * 80);
         }, 400);
 
@@ -431,26 +369,12 @@
         setInterval(fetchMetrics, 3000); fetchMetrics();
 
         fetch('/ledger.json').then(res => res.json()).then(commits => {
-                globalCommits = commits; const list = document.getElementById('telemetry-list'); list.innerHTML = ''; 
-                commits.forEach((c, idx) => {
-                    const safeMsg = document.createTextNode(c.msg).textContent;
-                    list.innerHTML += `<li onclick="showLedgerCommit(${idx})" class="interactive-row hover:bg-zinc-900/50 p-2 rounded transition-colors group border-b border-[#1f1f22] last:border-0 flex items-start gap-2"><span class="log-date mt-0.5 shrink-0 text-zinc-500 text-[10px]">[${c.date}]</span> <span class="log-hash mt-0.5 shrink-0 text-brand-400 font-bold group-hover:text-brand-300 transition-colors text-[10px]">[${c.hash_short}]</span> <span class="truncate text-zinc-300 text-[10px] sm:text-[11px]">${safeMsg}</span></li>`;
-                });
-            }).catch(err => { document.getElementById('telemetry-list').innerHTML = '<li class="text-rose-500 p-2">Failed to sync cryptographic ledger.</li>'; });
-
-        // --- BACKGROUND NOISE & SSE ---
-        const benignLogs = ["sys_enter_mprotect() -> PROT_READ|PROT_EXEC", "bpf_map_lookup_elem() -> 0x0", "sys_enter_openat() -> fd 3", "sys_enter_execve() -> /usr/bin/bash", "sched_process_exec() -> pid 4192", "tcp_sendmsg() -> 136.119.36.18:50051", "bpf_ringbuf_reserve() -> 256 bytes", "sys_enter_read() -> 4096 bytes"];
-        setInterval(() => {
-            if (isTermPaused || isSpiking) return;
-            if (Math.random() > 0.4) {
-                const log = benignLogs[Math.floor(Math.random() * benignLogs.length)];
-                const time = new Date().toISOString().split('T')[1].slice(0,8);
-                const html = `<span class="shrink-0 text-[10px] sm:text-xs w-16 text-zinc-600">[${time}]</span> <span class="shrink-0 w-12 sm:w-16 text-[10px] sm:text-xs text-zinc-500 text-center">[TRACE]</span> <span class="text-[10px] sm:text-[11px] flex-1 truncate text-zinc-500">${log}</span>`;
-                const div = document.createElement('div'); div.className = `mb-1 flex gap-2 sm:gap-3 animate-fade-in-up py-0.5 mx-1 font-mono`; div.innerHTML = html;
-                const terminal = document.getElementById('terminal-logs'); terminal.appendChild(div);
-                terminal.scrollTop = terminal.scrollHeight; if (terminal.children.length > 60) terminal.removeChild(terminal.children[0]);
-            }
-        }, 800);
+            globalCommits = commits; const list = document.getElementById('telemetry-list'); list.innerHTML = ''; 
+            commits.forEach((c, idx) => {
+                const safeMsg = escapeHtml(c.msg);
+                list.innerHTML += `<li onclick="showLedgerCommit(${idx})" class="interactive-row hover:bg-zinc-900/50 p-2 rounded transition-colors group border-b border-[#1f1f22] last:border-0 flex items-start gap-2"><span class="log-date mt-0.5 shrink-0 text-zinc-500 text-[10px]">[${c.date}]</span> <span class="log-hash mt-0.5 shrink-0 text-[#14b8a6] font-bold group-hover:text-brand-300 transition-colors text-[10px]">[${c.hash_short}]</span> <span class="truncate text-zinc-300 text-[10px] sm:text-[11px]">${safeMsg}</span></li>`;
+            });
+        }).catch(err => { document.getElementById('telemetry-list').innerHTML = '<li class="text-rose-500 p-2">Failed to sync cryptographic ledger.</li>'; });
 
         const evtSource = new EventSource('/api/telemetry');
         evtSource.onmessage = function(event) {
@@ -458,23 +382,27 @@
             const data = JSON.parse(event.data); const time = new Date(data.timestamp).toISOString().split('T')[1].slice(0,8);
             
             if (data.type === 'TRACE') {
-                const html = `<div class="mb-1 font-mono text-[10px] md:text-[11px] animate-fade-in-up flex gap-2 sm:gap-3 opacity-70 hover:opacity-100 transition-opacity mx-1 py-0.5"><span class="text-zinc-600 shrink-0 w-16 text-[10px] sm:text-xs">[${time}]</span> <span class="text-zinc-500 shrink-0 w-12 sm:w-16 text-center text-[10px] sm:text-xs">[TRACE]</span> <span class="text-zinc-400 truncate">${data.message}</span></div>`;
-                const tempDiv = document.createElement('div'); tempDiv.innerHTML = html; 
-                const terminal = document.getElementById('terminal-logs'); terminal.appendChild(tempDiv.firstChild);
-            } 
-            else if (data.type === 'KILL') {
+                if(isFilterActive) {
+                    const safeMsg = escapeHtml(data.message);
+                    const safeMsgForAttr = safeMsg.replace(/'/g, "&#39;");
+                    const html = `<div onclick="showTraceDossier('${safeMsgForAttr}', '${time}')" class="trace-log mb-1 font-mono text-[10px] md:text-[11px] animate-fade-in-up flex gap-2 sm:gap-3 opacity-70 hover:opacity-100 transition-colors hover:bg-zinc-900 mx-1 py-1 rounded cursor-pointer"><span class="text-zinc-600 shrink-0 w-16 text-[10px] sm:text-xs pl-2">[${time}]</span> <span class="text-zinc-500 shrink-0 w-12 sm:w-16 text-center text-[10px] sm:text-xs border border-zinc-700 rounded px-1">[TRACE]</span> <span class="text-zinc-400 truncate flex-1">${safeMsg}</span></div>`;
+                    const tempDiv = document.createElement('div'); tempDiv.innerHTML = html; 
+                    const terminal = document.getElementById('terminal-logs'); terminal.appendChild(tempDiv.firstChild);
+                }
+            } else if (data.type === 'KILL') {
                 if(data.threats_total) {
                     const el = document.getElementById('metric-threats'); el.innerText = data.threats_total.toLocaleString(); el.classList.add('scale-110'); setTimeout(() => el.classList.remove('scale-110'), 300);
-                    isSpiking = true; targetVelocity = 19500; setTimeout(() => { isSpiking = false; targetVelocity = 6000; }, 600);
+                    isSpiking = true; targetExecve = 12000; targetOpenat = 7500; setTimeout(() => { isSpiking = false; targetExecve = 4000; targetOpenat = 2000; }, 600);
                 }
-                const safeThreat = document.createTextNode(data.threat).textContent; const safeId = document.createTextNode(data.edge_id).textContent;
-                const html = `<div onclick="showThreatDossier('${safeId}', '${data.pid}', '${data.latency_us}', '${data.severity}', '${safeThreat}', '${time}')" class="interactive-log mb-1.5 flex gap-2 sm:gap-3 animate-fade-in-up bg-rose-500/10 border border-rose-500/30 py-2.5 rounded shadow-[0_0_15px_rgba(244,63,94,0.15)] mx-1 mt-2 cursor-pointer hover:bg-rose-500/20 transition-colors"><span class="text-zinc-500 shrink-0 hidden sm:inline pt-0.5 text-[10px] sm:text-xs pl-2">[${time}]</span> <span class="text-rose-500 font-bold shrink-0 w-12 sm:w-16 pt-0.5 text-[10px] sm:text-xs text-center animate-pulse">[KILL]</span> <span class="text-zinc-200 text-[10px] sm:text-[11px] leading-relaxed flex-1 truncate"><span class="text-brand-400 font-bold hidden sm:inline">${data.edge_id}</span> <span class="sm:hidden text-brand-400 font-bold">NODE</span> intercepted <span class="text-rose-400 font-bold bg-rose-500/10 px-1 rounded border border-rose-500/20">\`${safeThreat}\`</span><span class="text-[9px] text-rose-500 font-bold block mt-1 tracking-widest uppercase"><span class="w-1.5 h-1.5 bg-rose-500 rounded-full inline-block mr-1 animate-pulse"></span> CLICK FOR INTELLIGENCE DOSSIER ↗</span></span></div>`;
+                const safeThreat = escapeHtml(data.threat); const safeId = escapeHtml(data.edge_id);
+                const safeThreatAttr = safeThreat.replace(/'/g, "&#39;");
+                const html = `<div onclick="showThreatDossier('${safeId}', '${data.pid}', '${data.latency_us}', '${data.severity}', '${safeThreatAttr}', '${time}')" class="interactive-log mb-1.5 flex gap-2 sm:gap-3 animate-fade-in-up bg-rose-500/10 border border-rose-500/30 py-2.5 rounded shadow-[0_0_15px_rgba(244,63,94,0.15)] mx-1 mt-2 cursor-pointer hover:bg-rose-500/20 transition-colors"><span class="text-zinc-500 shrink-0 hidden sm:inline pt-0.5 text-[10px] sm:text-xs pl-2 w-16">[${time}]</span> <span class="text-rose-500 font-bold shrink-0 w-12 sm:w-16 pt-0.5 text-[10px] sm:text-xs text-center animate-pulse border border-rose-500/50 rounded px-1 bg-rose-500/20">[KILL]</span> <span class="text-zinc-200 text-[10px] sm:text-[11px] leading-relaxed flex-1 truncate"><span class="text-brand-400 font-bold hidden sm:inline">${data.edge_id}</span> <span class="sm:hidden text-brand-400 font-bold">NODE</span> intercepted <span class="text-rose-400 font-bold bg-rose-500/10 px-1 rounded border border-rose-500/20">\`${safeThreat}\`</span><span class="text-[9px] text-rose-500 font-bold block mt-1 tracking-widest uppercase"><span class="w-1.5 h-1.5 bg-rose-500 rounded-full inline-block mr-1 animate-pulse shadow-[0_0_8px_rgba(244,63,94,0.5)]"></span> CLICK FOR DOSSIER ↗</span></span></div>`;
                 const tempDiv = document.createElement('div'); tempDiv.innerHTML = html; 
                 const terminal = document.getElementById('terminal-logs'); terminal.appendChild(tempDiv.firstChild);
             }
-            
             const terminal = document.getElementById('terminal-logs');
-            terminal.scrollTop = terminal.scrollHeight; if (terminal.children.length > 50) { terminal.removeChild(terminal.children[1]); }
+            terminal.scrollTop = terminal.scrollHeight; 
+            while (terminal.children.length > 80) { terminal.removeChild(terminal.children[0]); }
         };
     </script>
 </body>
