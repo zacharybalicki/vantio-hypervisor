@@ -8,16 +8,13 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script>
-        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { 400: '#2dd4bf', 500: '#14b8a6' }, dark: { bg: '#050505', panel: '#0a0a0c', border: '#1f1f22' } }, fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] }, animation: { 'fade-in-up': 'fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards' }, keyframes: { fadeInUp: { '0%': { opacity: 0, transform: 'translateY(15px)' }, '100%': { opacity: 1, transform: 'translateY(0)' } } } } }
+        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: { 400: '#2dd4bf', 500: '#14b8a6' }, dark: { bg: '#050505', panel: '#0a0a0c', border: '#1f1f22' } }, fontFamily: { sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] } } } }
     </script>
     <style>
         body { background-color: #050505; color: #e5e5e5; overflow-x: hidden; }
         .bg-grid { background-size: 40px 40px; background-image: linear-gradient(to right, rgba(20, 184, 166, 0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(20, 184, 166, 0.04) 1px, transparent 1px); mask-image: linear-gradient(to bottom, black 40%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%); position: fixed; inset: 0; z-index: -1; pointer-events: none; }
         .glass-panel { background: rgba(10, 10, 12, 0.7); backdrop-filter: blur(20px); border: 1px solid var(--tw-colors-dark-border); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5); }
-        .pulse-dot { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; box-shadow: 0 0 12px #14b8a6; } 50% { opacity: .4; box-shadow: none; } }
         .term-scroll::-webkit-scrollbar { width: 4px; } .term-scroll::-webkit-scrollbar-track { background: transparent; } .term-scroll::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; } .term-scroll::-webkit-scrollbar-thumb:hover { background: #555; }
-        . { opacity: 0; }
         #slide-backdrop { transition: opacity 0.3s ease; opacity: 0; pointer-events: none; } #slide-backdrop.active { opacity: 1; pointer-events: auto; }
         #slide-panel { transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); transform: translateX(100%); } #slide-panel.active { transform: translateX(0); }
         .interactive-log { cursor: pointer; transition: all 0.2s ease; border-left: 2px solid transparent; } .interactive-log:hover { background: rgba(244, 63, 94, 0.1); border-left: 4px solid #f43f5e; padding-left: 8px; }
@@ -34,7 +31,7 @@
         <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center gap-3 sm:gap-4">
-                    <div class="w-2.5 h-2.5 bg-brand-500 rounded-full pulse-dot shrink-0"></div>
+                    <div class="w-2.5 h-2.5 bg-brand-500 rounded-full animate-pulse shadow-[0_0_10px_#14b8a6] shrink-0"></div>
                     <span class="font-mono font-bold text-lg md:text-xl tracking-widest text-white truncate cursor-pointer hover:text-brand-300 transition-colors" onclick="window.location.reload()">VANTIO<span class="text-brand-500">.OS</span></span>
                     <span onclick="openSystemDossier('apex')" class="hidden min-[400px]:block ml-2 sm:ml-4 px-2.5 py-1 rounded-md text-[9px] sm:text-[10px] font-mono bg-brand-500/10 text-brand-400 border border-brand-500/30 hover:bg-brand-500/20 hover:text-brand-300 hover:border-brand-500/50 transition-colors tracking-widest shadow-[0_0_10px_rgba(20,184,166,0.1)] group cursor-pointer">
                         ENTERPRISE APEX <span class="opacity-0 group-hover:opacity-100 transition-opacity ml-1">&nearr;</span>
@@ -55,7 +52,7 @@
     </nav>
 
     <main class="flex-1 max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 flex flex-col gap-6 md:gap-8 z-10">
-        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-2 animate-fade-in-up ">
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-2">
             <div>
                 <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white tracking-tight mb-2 bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent">Omniscient Control Plane</h1>
                 <p class="text-zinc-400 text-xs sm:text-sm max-w-2xl leading-relaxed">Global observability and deterministic threat mitigation across all Edge Nodes. eBPF RingBuf telemetry streaming via Mutual TLS.</p>
@@ -65,7 +62,7 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 animate-fade-in-up  delay-100">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div onclick="openMetricDossier('nodes')" class="metric-card glass-panel p-5 md:p-6 rounded-xl border-t-2 border-t-brand-500 relative overflow-hidden group hover:bg-dark-panel/80 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(20,184,166,0.15)] flex flex-col justify-between">
                 <div>
                     <div class="flex justify-between items-start">
@@ -107,7 +104,7 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 sm:gap-8 animate-fade-in-up  delay-200">
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 sm:gap-8">
             <div class="xl:col-span-2 flex flex-col gap-6">
                 <div class="glass-panel rounded-xl p-4 sm:p-5 h-[180px] sm:h-[220px] shadow-2xl flex flex-col relative overflow-hidden cursor-pointer group border border-dark-border hover:border-brand-500/40 transition-colors" onclick="openSystemDossier('radar')">
                     <div class="flex justify-between items-center mb-2 shrink-0 relative z-10">
@@ -199,6 +196,17 @@
         let isTermPaused = false;
         let isFilterActive = true; 
 
+        window.togglePolicy = function(el) {
+            el.classList.toggle('bg-brand-500');
+            el.classList.toggle('bg-zinc-800');
+            el.classList.toggle('shadow-[0_0_10px_rgba(20,184,166,0.3)]');
+            const dot = el.children[0];
+            dot.classList.toggle('right-1');
+            dot.classList.toggle('left-1');
+            dot.classList.toggle('bg-white');
+            dot.classList.toggle('bg-zinc-400');
+        };
+
         function escapeHtml(unsafe) {
             return (unsafe || '').replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
         }
@@ -287,7 +295,28 @@
 
         function toggleSlideOver(type) {
             if(type === 'policy') {
-                const html = '<div class="space-y-4"><div class="p-4 rounded-lg bg-dark-bg border border-dark-border hover:border-brand-500/50 transition-colors"><div class="flex justify-between items-start mb-2"><div><h4 class="text-sm font-bold text-white">Strict execve() Sandbox</h4><p class="text-[11px] text-zinc-400 mt-1">Block unauthorized shell execution at Ring-0.</p></div><div class="w-10 h-5 bg-brand-500 rounded-full relative shadow-[0_0_10px_rgba(20,184,166,0.3)] shrink-0"><div class="absolute right-1 top-1 bg-white w-3 h-3 rounded-full"></div></div></div></div><div class="p-4 rounded-lg bg-dark-bg border border-dark-border hover:border-brand-500/50 transition-colors"><div class="flex justify-between items-start mb-2"><div><h4 class="text-sm font-bold text-white">Semantic AI Filters</h4><p class="text-[11px] text-zinc-400 mt-1">Intercept SQLi & Prompt Injections locally.</p></div><div class="w-10 h-5 bg-brand-500 rounded-full relative shadow-[0_0_10px_rgba(20,184,166,0.3)] shrink-0"><div class="absolute right-1 top-1 bg-white w-3 h-3 rounded-full"></div></div></div></div><div class="p-4 rounded-lg bg-dark-bg border border-dark-border opacity-50 cursor-not-allowed"><div class="flex justify-between items-start mb-2"><div><h4 class="text-sm font-bold text-white">WORM Storage Replication</h4><p class="text-[9px] text-rose-400 font-bold mt-1 tracking-widest uppercase border border-rose-500/30 bg-rose-500/10 inline-block px-1.5 py-0.5 rounded">Enterprise License Required</p></div><div class="w-10 h-5 bg-zinc-800 rounded-full relative shrink-0"><div class="absolute left-1 top-1 bg-zinc-500 w-3 h-3 rounded-full"></div></div></div></div><button onclick="closeSlideOver()" class="w-full mt-6 bg-brand-500 hover:bg-brand-400 text-black px-4 py-3 rounded-md text-sm font-bold transition-all shadow-[0_0_15px_rgba(20,184,166,0.2)]">Deploy to Edge Fleet</button></div>';
+                const html = `
+                    <div class="space-y-4">
+                        <div class="p-4 rounded-lg bg-dark-bg border border-dark-border hover:border-brand-500/50 transition-colors">
+                            <div class="flex justify-between items-start mb-2">
+                                <div><h4 class="text-sm font-bold text-white">Strict execve() Sandbox</h4><p class="text-[11px] text-zinc-400 mt-1">Block unauthorized shell execution at Ring-0.</p></div>
+                                <div onclick="window.togglePolicy(this)" class="w-10 h-5 bg-brand-500 rounded-full relative shadow-[0_0_10px_rgba(20,184,166,0.3)] shrink-0 cursor-pointer transition-colors duration-300"><div class="absolute right-1 top-1 bg-white w-3 h-3 rounded-full transition-all duration-300"></div></div>
+                            </div>
+                        </div>
+                        <div class="p-4 rounded-lg bg-dark-bg border border-dark-border hover:border-brand-500/50 transition-colors">
+                            <div class="flex justify-between items-start mb-2">
+                                <div><h4 class="text-sm font-bold text-white">Semantic AI Filters</h4><p class="text-[11px] text-zinc-400 mt-1">Intercept SQLi & Prompt Injections locally.</p></div>
+                                <div onclick="window.togglePolicy(this)" class="w-10 h-5 bg-brand-500 rounded-full relative shadow-[0_0_10px_rgba(20,184,166,0.3)] shrink-0 cursor-pointer transition-colors duration-300"><div class="absolute right-1 top-1 bg-white w-3 h-3 rounded-full transition-all duration-300"></div></div>
+                            </div>
+                        </div>
+                        <div class="p-4 rounded-lg bg-dark-bg border border-dark-border opacity-50 cursor-not-allowed">
+                            <div class="flex justify-between items-start mb-2">
+                                <div><h4 class="text-sm font-bold text-white">WORM Storage Replication</h4><p class="text-[9px] text-rose-400 font-bold mt-1 tracking-widest uppercase border border-rose-500/30 bg-rose-500/10 inline-block px-1.5 py-0.5 rounded">Enterprise License Required</p></div>
+                                <div class="w-10 h-5 bg-zinc-800 rounded-full relative shrink-0"><div class="absolute left-1 top-1 bg-zinc-500 w-3 h-3 rounded-full"></div></div>
+                            </div>
+                        </div>
+                        <button onclick="closeSlideOver()" class="w-full mt-6 bg-brand-500 hover:bg-brand-400 text-black px-4 py-3 rounded-md text-sm font-bold transition-all shadow-[0_0_15px_rgba(20,184,166,0.2)]">Deploy to Edge Fleet</button>
+                    </div>`;
                 openSlideOver('<svg class="w-5 h-5 text-brand-500 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg> zk-STARK Policies', 'GLOBAL ORCHESTRATION', html, 'text-brand-400');
             }
         }
@@ -385,7 +414,7 @@
                 if(isFilterActive) {
                     const safeMsg = escapeHtml(data.message);
                     const safeMsgForAttr = safeMsg.replace(/'/g, "&#39;");
-                    const html = `<div onclick="showTraceDossier('${safeMsgForAttr}', '${time}')" class="trace-log mb-1 font-mono text-[10px] md:text-[11px] animate-fade-in-up flex gap-2 sm:gap-3 opacity-70 hover:opacity-100 transition-colors hover:bg-zinc-900 mx-1 py-1 rounded cursor-pointer"><span class="text-zinc-600 shrink-0 w-16 text-[10px] sm:text-xs pl-2">[${time}]</span> <span class="text-zinc-500 shrink-0 w-12 sm:w-16 text-center text-[10px] sm:text-xs border border-zinc-700 rounded px-1">[TRACE]</span> <span class="text-zinc-400 truncate flex-1">${safeMsg}</span></div>`;
+                    const html = `<div onclick="showTraceDossier('${safeMsgForAttr}', '${time}')" class="trace-log mb-1 font-mono text-[10px] md:text-[11px] flex gap-2 sm:gap-3 opacity-70 hover:opacity-100 transition-colors hover:bg-zinc-900 mx-1 py-1 rounded cursor-pointer"><span class="text-zinc-600 shrink-0 w-16 text-[10px] sm:text-xs pl-2">[${time}]</span> <span class="text-zinc-500 shrink-0 w-12 sm:w-16 text-center text-[10px] sm:text-xs border border-zinc-700 rounded px-1">[TRACE]</span> <span class="text-zinc-400 truncate flex-1">${safeMsg}</span></div>`;
                     const tempDiv = document.createElement('div'); tempDiv.innerHTML = html; 
                     const terminal = document.getElementById('terminal-logs'); terminal.appendChild(tempDiv.firstChild);
                 }
@@ -396,7 +425,7 @@
                 }
                 const safeThreat = escapeHtml(data.threat); const safeId = escapeHtml(data.edge_id);
                 const safeThreatAttr = safeThreat.replace(/'/g, "&#39;");
-                const html = `<div onclick="showThreatDossier('${safeId}', '${data.pid}', '${data.latency_us}', '${data.severity}', '${safeThreatAttr}', '${time}')" class="interactive-log mb-1.5 flex gap-2 sm:gap-3 animate-fade-in-up bg-rose-500/10 border border-rose-500/30 py-2.5 rounded shadow-[0_0_15px_rgba(244,63,94,0.15)] mx-1 mt-2 cursor-pointer hover:bg-rose-500/20 transition-colors"><span class="text-zinc-500 shrink-0 hidden sm:inline pt-0.5 text-[10px] sm:text-xs pl-2 w-16">[${time}]</span> <span class="text-rose-500 font-bold shrink-0 w-12 sm:w-16 pt-0.5 text-[10px] sm:text-xs text-center animate-pulse border border-rose-500/50 rounded px-1 bg-rose-500/20">[KILL]</span> <span class="text-zinc-200 text-[10px] sm:text-[11px] leading-relaxed flex-1 truncate"><span class="text-brand-400 font-bold hidden sm:inline">${data.edge_id}</span> <span class="sm:hidden text-brand-400 font-bold">NODE</span> intercepted <span class="text-rose-400 font-bold bg-rose-500/10 px-1 rounded border border-rose-500/20">\`${safeThreat}\`</span><span class="text-[9px] text-rose-500 font-bold block mt-1 tracking-widest uppercase"><span class="w-1.5 h-1.5 bg-rose-500 rounded-full inline-block mr-1 animate-pulse shadow-[0_0_8px_rgba(244,63,94,0.5)]"></span> CLICK FOR DOSSIER ↗</span></span></div>`;
+                const html = `<div onclick="showThreatDossier('${safeId}', '${data.pid}', '${data.latency_us}', '${data.severity}', '${safeThreatAttr}', '${time}')" class="interactive-log mb-1.5 flex gap-2 sm:gap-3 bg-rose-500/10 border border-rose-500/30 py-2.5 rounded shadow-[0_0_15px_rgba(244,63,94,0.15)] mx-1 mt-2 cursor-pointer hover:bg-rose-500/20 transition-colors"><span class="text-zinc-500 shrink-0 hidden sm:inline pt-0.5 text-[10px] sm:text-xs pl-2 w-16">[${time}]</span> <span class="text-rose-500 font-bold shrink-0 w-12 sm:w-16 pt-0.5 text-[10px] sm:text-xs text-center animate-pulse border border-rose-500/50 rounded px-1 bg-rose-500/20">[KILL]</span> <span class="text-zinc-200 text-[10px] sm:text-[11px] leading-relaxed flex-1 truncate"><span class="text-brand-400 font-bold hidden sm:inline">${data.edge_id}</span> <span class="sm:hidden text-brand-400 font-bold">NODE</span> intercepted <span class="text-rose-400 font-bold bg-rose-500/10 px-1 rounded border border-rose-500/20">\`${safeThreat}\`</span><span class="text-[9px] text-rose-500 font-bold block mt-1 tracking-widest uppercase"><span class="w-1.5 h-1.5 bg-rose-500 rounded-full inline-block mr-1 animate-pulse shadow-[0_0_8px_rgba(244,63,94,0.5)]"></span> CLICK FOR DOSSIER ↗</span></span></div>`;
                 const tempDiv = document.createElement('div'); tempDiv.innerHTML = html; 
                 const terminal = document.getElementById('terminal-logs'); terminal.appendChild(tempDiv.firstChild);
             }

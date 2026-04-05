@@ -12,17 +12,15 @@
     <style>
         body { background-color: #050505; color: #e5e5e5; overflow-x: hidden; }
         .bg-grid { background-size: 40px 40px; background-image: linear-gradient(to right, rgba(20, 184, 166, 0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(20, 184, 166, 0.04) 1px, transparent 1px); position: fixed; inset: 0; z-index: -1; pointer-events: none; }
-        .term-scroll::-webkit-scrollbar { width: 4px; } .term-scroll::-webkit-scrollbar-track { background: transparent; } .term-scroll::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
-        #slide-backdrop { transition: opacity 0.3s ease; opacity: 0; pointer-events: none; } #slide-backdrop.active { opacity: 1; pointer-events: auto; }
-        #slide-panel { transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); transform: translateX(100%); } #slide-panel.active { transform: translateX(0); }
         .arch-card { cursor: pointer; transition: all 0.2s ease; position: relative; overflow: hidden; } .arch-card:hover { transform: translateY(-4px); }
+        .modal-transition { transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
     </style>
 </head>
 <body class="font-sans min-h-screen selection:bg-brand-500 selection:text-white pb-10">
     <div class="bg-grid"></div>
     <nav class="border-b border-dark-border bg-[#0a0a0c]/80 backdrop-blur-md sticky top-0 z-40">
         <div class="max-w-[1000px] mx-auto px-6 h-16 flex items-center justify-between">
-            <a href="/" class="font-mono font-bold text-lg sm:text-xl tracking-widest text-white flex items-center gap-3">
+            <a href="/" class="font-mono font-bold text-lg sm:text-xl tracking-widest text-white flex items-center gap-3 hover:text-brand-300 transition-colors">
                 <div class="w-2.5 h-2.5 bg-brand-500 rounded-full animate-pulse shadow-[0_0_10px_#14b8a6]"></div> VANTIO<span class="text-brand-500">.DOCS</span>
             </a>
             <div class="flex items-center gap-6">
@@ -59,47 +57,94 @@
         </div>
     </div>
 
-    <div id="slide-backdrop" class="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm" onclick="closeSlideOver()"></div>
-    <div id="slide-panel" class="fixed inset-y-0 right-0 w-full sm:w-[450px] md:w-[700px] bg-[#0a0a0c] border-l shadow-[0_0_50px_rgba(0,0,0,0.8)] z-[70] flex flex-col slide-panel">
-        <div class="px-6 sm:px-10 py-6 border-b border-[#1f1f22] bg-black/80 flex justify-between items-start shrink-0 backdrop-blur-md relative">
-            <div class="pr-12 w-full shrink-0 flex-1">
-                <h2 class="text-xl sm:text-3xl font-bold text-white font-mono tracking-tight flex items-center gap-3 leading-tight break-words" id="slide-title">Title</h2>
-                <p class="text-xs text-brand-400 mt-2 font-mono uppercase tracking-widest" id="slide-subtitle">Subtitle</p>
-            </div>
-            <button onclick="closeSlideOver()" class="absolute top-6 right-6 text-zinc-500 hover:text-white bg-zinc-800/50 hover:bg-zinc-700/50 p-2.5 rounded-md transition-colors mt-1 shrink-0"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+    <div id="docs-modal" class="fixed inset-0 bg-[#050505] z-[100] transform translate-y-full modal-transition flex flex-col overflow-y-auto">
+        <div class="sticky top-0 bg-[#0a0a0c]/90 backdrop-blur-md border-b border-dark-border px-6 py-4 flex justify-between items-center z-10">
+            <h2 class="text-sm sm:text-lg font-mono font-bold text-zinc-300 flex items-center gap-3" id="modal-title">Title</h2>
+            <button onclick="closeModal()" class="text-zinc-400 hover:text-white px-4 py-2 bg-zinc-800 hover:bg-zinc-700 rounded-md transition-colors font-bold text-xs sm:text-sm border border-transparent hover:border-zinc-500">Close Details &times;</button>
         </div>
-        <div class="p-6 sm:p-10 overflow-y-auto flex-1 term-scroll bg-gradient-to-b from-[#0a0a0c] to-[#050505]" id="slide-content"></div>
+        <div class="max-w-[800px] mx-auto w-full px-6 py-12 sm:py-20" id="modal-content"></div>
     </div>
 
     <script>
-        function closeSlideOver() { document.getElementById('slide-backdrop').classList.remove('active'); document.getElementById('slide-panel').classList.remove('active'); document.body.style.overflow = ''; }
-        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSlideOver(); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
 
         function openDocsDossier(type) {
+            let title = '';
+            let content = '';
+            
             if(type === 'kernel') {
-                document.getElementById('slide-title').innerHTML = '<div class="w-3.5 h-3.5 bg-[#14b8a6] rounded-full animate-pulse shadow-[0_0_10px_rgba(20,184,166,0.5)] shrink-0"></div> <span class="break-words">Kernel Physics (eBPF)</span>';
-                document.getElementById('slide-subtitle').className = 'text-xs mt-2 font-mono uppercase tracking-widest text-[#14b8a6]';
-                document.getElementById('slide-subtitle').innerText = 'THE MATHEMATICS OF ZERO-LATENCY INTERCEPTION';
-                document.getElementById('slide-content').innerHTML = '<div class="space-y-8 font-sans"><div><h3 class="text-white font-bold text-xl mb-3">The Legacy Userspace Bottleneck</h3><p class="text-zinc-400 text-[15px] leading-7">Traditional cybersecurity agents operate in <strong>Ring-3 Userspace</strong>. When a process executes a system call, the CPU must physically halt execution, switch context into the kernel, verify the action, switch back, ask the agent, and finally grant permission. This adds <strong class="text-rose-400">10,000+ microseconds of latency</strong>.</p></div><div class="bg-[#14b8a6]/10 border border-[#14b8a6]/30 p-6 sm:p-8 rounded-xl shadow-[0_0_15px_rgba(20,184,166,0.1)]"><h3 class="text-[#14b8a6] font-bold mb-5 font-mono flex items-center gap-2"><svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg> The Vantio Advantage: Ring-0 Execution</h3><p class="text-zinc-300 text-[15px] leading-7 mb-6">Vantio bypasses Userspace entirely. We compile pure-Rust logic directly into bytecode and inject it straight into the <strong>Ring-0 Linux Kernel</strong> via eBPF.</p><ul class="text-zinc-400 text-[14px] font-mono space-y-5"><li class="flex items-start gap-3"><span class="text-emerald-400 mt-0.5">&check;</span> <div><strong class="text-white block mb-1">Zero Context Switching:</strong><span class="text-zinc-500">Threats evaluated exactly where generated.</span></div></li><li class="flex items-start gap-3"><span class="text-emerald-400 mt-0.5">&check;</span> <div><strong class="text-white block mb-1">Sub-Microsecond Latency:</strong><span class="text-zinc-500">Executes the hook in &lt; 2.5&mu;s.</span></div></li><li class="flex items-start gap-3"><span class="text-emerald-400 mt-0.5">&check;</span> <div><strong class="text-white block mb-1">Zero-Allocation Memory:</strong><span class="text-zinc-500">Telemetry is passed asynchronously to userspace via a lockless BPF RingBuf, meaning zero memory leaks.</span></div></li></ul></div></div>';
-                document.getElementById('slide-panel').className = 'fixed inset-y-0 right-0 w-full sm:w-[450px] md:w-[700px] bg-[#0a0a0c] border-l shadow-[0_0_50px_rgba(0,0,0,0.8)] z-[70] flex flex-col slide-panel border-[#14b8a6]/50';
+                title = '<div class="w-3 h-3 bg-[#14b8a6] rounded-full animate-pulse shadow-[0_0_10px_rgba(20,184,166,0.5)]"></div> I. KERNEL PHYSICS (eBPF)';
+                content = `
+                    <h1 class="text-3xl sm:text-5xl font-bold text-white mb-6">eBPF Interception Architecture</h1>
+                    <p class="text-zinc-400 text-base sm:text-lg mb-8 leading-relaxed">Vantio bypasses legacy userspace limitations by injecting pure-Rust bytecode directly into the Linux Ring-0 execution path.</p>
+                    
+                    <div class="bg-dark-panel border border-dark-border rounded-xl p-6 sm:p-8 mb-8">
+                        <h3 class="text-[#14b8a6] font-mono font-bold mb-4 text-sm sm:text-base">LSM Hook Mechanics</h3>
+                        <p class="text-zinc-300 leading-relaxed mb-4 text-sm sm:text-base">By attaching to <code class="bg-zinc-800 px-1.5 py-0.5 rounded text-brand-400 font-mono text-xs border border-zinc-700">bprm_check_security</code>, the hypervisor halts execution before CPU registers are allocated to the userspace process. This completely eliminates Context Switching overhead.</p>
+                        <div class="bg-black p-4 rounded border border-zinc-800 font-mono text-xs sm:text-sm text-zinc-400 space-y-1">
+                            <div>> Hooked: <span class="text-brand-400">sys_enter_execve</span></div>
+                            <div>> Processing payload...</div>
+                            <div class="text-emerald-400">> Evaluated in 2.1&mu;s (Clean)</div>
+                        </div>
+                    </div>
+                    <div class="bg-dark-panel border border-dark-border rounded-xl p-6 sm:p-8">
+                        <h3 class="text-[#14b8a6] font-mono font-bold mb-4 text-sm sm:text-base">Memory Safety Guarantee</h3>
+                        <p class="text-zinc-300 leading-relaxed text-sm sm:text-base">Unlike traditional C-based kernel modules that can crash the entire system, Vantio's eBPF probes are cryptographically verified by the Linux Kernel Verifier on initialization to guarantee no kernel panics or infinite loops can occur.</p>
+                    </div>
+                `;
             } 
             else if(type === 'mtls') {
-                document.getElementById('slide-title').innerHTML = '<div class="w-3.5 h-3.5 bg-blue-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(59,130,246,0.5)] shrink-0"></div> <span class="break-words">Mutual TLS Uplink</span>';
-                document.getElementById('slide-subtitle').className = 'text-xs mt-2 font-mono uppercase tracking-widest text-blue-400';
-                document.getElementById('slide-subtitle').innerText = 'MATHEMATICALLY IMPENETRABLE TRANSIT';
-                document.getElementById('slide-content').innerHTML = '<div class="space-y-8 font-sans"><div><h3 class="text-white font-bold text-xl mb-3">The JSON/REST Vulnerability</h3><p class="text-zinc-400 text-[15px] leading-7">Legacy architecture relies on Edge Nodes sending telemetry via JSON over standard HTTP POST. This leaves the system inherently vulnerable to schema drift and Man-In-The-Middle (MITM) attacks.</p></div><div class="bg-blue-500/10 border border-blue-500/30 p-6 sm:p-8 rounded-xl shadow-[0_0_15px_rgba(59,130,246,0.1)]"><h3 class="text-blue-400 font-bold mb-5 font-mono flex items-center gap-2"><svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg> The Vantio Advantage: mTLS</h3><p class="text-zinc-300 text-[15px] leading-7 mb-6">Vantio abandons HTTP. We operate a dedicated, encrypted <strong>Layer-4 TCP tunnel</strong> utilizing Mutual Transport Layer Security.</p><ul class="text-zinc-400 text-[14px] font-mono space-y-5"><li class="flex items-start gap-3"><span class="text-emerald-400 mt-0.5">&check;</span> <div><strong class="text-white block mb-1">Bidirectional Cryptography:</strong><span class="text-zinc-500">Control Plane mathematically refuses connections from any node without a valid Client Certificate.</span></div></li><li class="flex items-start gap-3"><span class="text-emerald-400 mt-0.5">&check;</span> <div><strong class="text-white block mb-1">Binary Payload Encoding:</strong><span class="text-zinc-500">Protocol Buffers reduce network payloads by 80% compared to JSON.</span></div></li></ul></div><div><h3 class="text-white font-bold text-xl mb-3">Pure-Rust Cryptography</h3><p class="text-zinc-400 text-[15px] leading-7">Unlike OpenSSL which is historically prone to buffer overflows, Vantio utilizes <code class="text-blue-400 bg-blue-500/10 border border-blue-500/20 px-1.5 py-0.5 rounded">rustls</code>&mdash;a memory-safe cryptographic engine.</p></div></div>';
-                document.getElementById('slide-panel').className = 'fixed inset-y-0 right-0 w-full sm:w-[450px] md:w-[700px] bg-[#0a0a0c] border-l shadow-[0_0_50px_rgba(0,0,0,0.8)] z-[70] flex flex-col slide-panel border-blue-500/50';
+                title = '<div class="w-3 h-3 bg-blue-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(59,130,246,0.5)]"></div> II. ZERO-TRUST NEURAL UPLINK';
+                content = `
+                    <h1 class="text-3xl sm:text-5xl font-bold text-white mb-6">Mutual TLS & gRPC Transit</h1>
+                    <p class="text-zinc-400 text-base sm:text-lg mb-8 leading-relaxed">The telemetry bus is mathematically sealed using hardware-backed X.509 v3 Client Certificates.</p>
+                    
+                    <div class="bg-dark-panel border border-dark-border rounded-xl p-6 sm:p-8 mb-8">
+                        <h3 class="text-blue-400 font-mono font-bold mb-4 text-sm sm:text-base">Bi-Directional Cryptography</h3>
+                        <p class="text-zinc-300 leading-relaxed mb-4 text-sm sm:text-base">Standard TLS only verifies the server. Vantio's mTLS implementation forces the Control Plane to cryptographically challenge every Edge Node before a connection is authorized.</p>
+                        <ul class="list-disc list-inside text-zinc-400 space-y-2 text-sm sm:text-base">
+                            <li>4096-bit RSA Key Pairs</li>
+                            <li>Strict Subject Alternative Name (SAN) enforcement</li>
+                            <li>Ephemeral Session Keys via Forward Secrecy</li>
+                        </ul>
+                    </div>
+                    <div class="bg-dark-panel border border-dark-border rounded-xl p-6 sm:p-8">
+                        <h3 class="text-blue-400 font-mono font-bold mb-4 text-sm sm:text-base">Protocol Buffer Encoding</h3>
+                        <p class="text-zinc-300 leading-relaxed text-sm sm:text-base">Telemetry is serialized into binary <code class="text-blue-400">Protobuf</code> payloads, reducing bandwidth usage by 82% compared to JSON over HTTP. This allows the cluster to process 100,000+ events per second with minimal CPU overhead.</p>
+                    </div>
+                `;
             }
             else if(type === 'plane') {
-                document.getElementById('slide-title').innerHTML = '<div class="w-3.5 h-3.5 bg-rose-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(244,63,94,0.5)] shrink-0"></div> <span class="break-words">Omniscient Control Plane</span>';
-                document.getElementById('slide-subtitle').className = 'text-xs mt-2 font-mono uppercase tracking-widest text-rose-500';
-                document.getElementById('slide-subtitle').innerText = 'ZERO-LATENCY KUBERNETES COMMAND CENTER';
-                document.getElementById('slide-content').innerHTML = '<div class="space-y-8 font-sans"><div><h3 class="text-white font-bold text-xl mb-3">The Static Dashboard Problem</h3><p class="text-zinc-400 text-[15px] leading-7">Most dashboards require the user to refresh the page to see new threats, or rely on heavy Websocket pollers that crush backend memory.</p></div><div class="bg-rose-500/10 border border-rose-500/30 p-6 sm:p-8 rounded-xl shadow-[0_0_15px_rgba(244,63,94,0.1)]"><h3 class="text-rose-500 font-bold mb-5 font-mono flex items-center gap-2"><svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg> The Vantio Advantage: Axum SSE</h3><p class="text-zinc-300 text-[15px] leading-7 mb-6">The Monolith is a dual-port multiplexer written in pure Rust. It concurrently runs the gRPC Threat Tunnel and the UI.</p><ul class="text-zinc-400 text-[14px] font-mono space-y-5"><li class="flex items-start gap-3"><span class="text-emerald-400 mt-0.5">&check;</span> <div><strong class="text-white block mb-1">Lockless Memory Channel:</strong><span class="text-zinc-500">Backend instantly pushes threats into an async broadcast channel.</span></div></li><li class="flex items-start gap-3"><span class="text-emerald-400 mt-0.5">&check;</span> <div><strong class="text-white block mb-1">Server-Sent Events:</strong><span class="text-zinc-500">Real-time, unidirectional threat data with near-zero latency.</span></div></li></ul></div></div>';
-                document.getElementById('slide-panel').className = 'fixed inset-y-0 right-0 w-full sm:w-[450px] md:w-[700px] bg-[#0a0a0c] border-l shadow-[0_0_50px_rgba(0,0,0,0.8)] z-[70] flex flex-col slide-panel border-rose-500/50';
+                title = '<div class="w-3 h-3 bg-rose-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(244,63,94,0.5)]"></div> III. OMNISCIENT CONTROL PLANE';
+                content = `
+                    <h1 class="text-3xl sm:text-5xl font-bold text-white mb-6">Axum Monolithic Architecture</h1>
+                    <p class="text-zinc-400 text-base sm:text-lg mb-8 leading-relaxed">A singular, shell-less Distroless container running a highly concurrent multiplexed server.</p>
+                    
+                    <div class="bg-dark-panel border border-dark-border rounded-xl p-6 sm:p-8 mb-8">
+                        <h3 class="text-rose-500 font-mono font-bold mb-4 text-sm sm:text-base">Server-Sent Events (SSE) Streaming</h3>
+                        <p class="text-zinc-300 leading-relaxed mb-4 text-sm sm:text-base">The dashboard does not poll the server. Threat intelligence is pushed asynchronously from the kernel to the UI using persistent HTTP/2 SSE tunnels.</p>
+                        <div class="w-full bg-zinc-900 rounded p-4 font-mono text-[10px] sm:text-xs border border-zinc-800 overflow-x-auto whitespace-nowrap">
+                            <span class="text-brand-400">gRPC Recv</span> &rarr; <span class="text-indigo-400">tokio::broadcast</span> &rarr; <span class="text-rose-400">Axum SSE Flush</span> &rarr; <span class="text-white">DOM Injection</span>
+                        </div>
+                    </div>
+                    <div class="bg-dark-panel border border-dark-border rounded-xl p-6 sm:p-8">
+                        <h3 class="text-rose-500 font-mono font-bold mb-4 text-sm sm:text-base">Immutable WORM Storage</h3>
+                        <p class="text-zinc-300 leading-relaxed text-sm sm:text-base">Once a threat is neutralized, its cryptographic hash is appended to a Write-Once-Read-Many (WORM) ledger. This ensures audit trails cannot be tampered with, even by root administrators or hostile actors.</p>
+                    </div>
+                `;
             }
-            document.getElementById('slide-backdrop').classList.add('active'); 
-            document.getElementById('slide-panel').classList.add('active'); 
-            document.body.style.overflow = 'hidden'; 
+            
+            document.getElementById('modal-title').innerHTML = title;
+            document.getElementById('modal-content').innerHTML = content;
+            document.getElementById('docs-modal').classList.add('translate-y-0');
+            document.getElementById('docs-modal').classList.remove('translate-y-full');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('docs-modal').classList.remove('translate-y-0');
+            document.getElementById('docs-modal').classList.add('translate-y-full');
+            document.body.style.overflow = '';
         }
 
         // Uptime sync
